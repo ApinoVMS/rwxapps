@@ -1,0 +1,2788 @@
+<!DOCTYPE html>
+<html lang="en" class="blue" manifest="tasks.appcache">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+	<title>My Tasks</title>
+	<style>
+body {
+    margin: 0;
+    min-height: 420px;
+    background-color: #efefef;
+}
+
+label {
+	display: block; margin-bottom: 20px;
+	font: bold 1.1em Helvetica, Arial, sans-serif;
+}
+
+input[type=text], input[type=search], input[type=date],
+input[type=submit], input[type=reset], textarea, select {
+	width: 100%; padding: 4px; font-size: 1.1em;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box; 
+	box-sizing: border-box;
+}
+
+textarea {
+	height: 80px;
+	font-family: Helvetica, Arial, sans-serif;
+}
+
+input[type=submit], input[type=reset], .item_delete, .item_insert a {
+	margin-bottom: 5px; padding: 8px; 
+	font-weight: bold; color: #fff; text-shadow: 0 -1px 1px #306d1b;
+	border-radius: 5px;
+}
+
+input[type=submit] {
+	background-color: #306d1b; border: 1px solid #306d1b;
+	background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #61ce3b), color-stop(1, #306d1b));
+	background-image: -webkit-linear-gradient(top, #61ce3b, #306d1b);
+	background-image: -moz-linear-gradient(top, #61ce3b, #306d1b);
+	background-image: -o-linear-gradient(top, #61ce3b, #306d1b);
+	background-image: -ms-linear-gradient(top, #61ce3b, #306d1b);
+	background-image: linear-gradient(to bottom, #61ce3b, #306d1b);
+}
+
+input[type=reset], .item_delete, .item_insert a {
+	background-color: #ad390c; border: 1px solid #ad390c;
+	text-decoration: none;
+	background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #ec4a0b), color-stop(1, #ad390c));
+	background-image: -webkit-linear-gradient(top, #ec4a0b, #ad390c);
+	background-image: -moz-linear-gradient(top, #ec4a0b, #ad390c);
+	background-image: -o-linear-gradient(top, #ec4a0b, #ad390c);
+	background-image: -ms-linear-gradient(top, #ec4a0b, #ad390c);
+	background-image: linear-gradient(to bottom, #ec4a0b, #ad390c);
+}
+
+.item_delete, .item_insert a {
+	float: right; height: 12px; line-height: 12px; margin: 3px 0 0 0; padding: 0.6em;
+	font-size: 0.8em;
+}
+
+header h1 {
+	margin: 0; padding: 5px;
+	font: 170% 'Carter One', Helvetica, Arial, sans-serif;
+	color: #fff; text-align: center; text-shadow: 2px 2px 2px #000;
+}
+
+.blue header h1 {
+	background-color: #0f4d92;
+	background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, rgb(15,76,145)), color-stop(1, rgb(10,50,96)));
+	background-image: -webkit-linear-gradient(top, rgb(15,76,145), rgb(10,50,96));
+	background-image: -moz-linear-gradient(top, rgb(15,76,145), rgb(10,50,96));
+	background-image: -o-linear-gradient(top, rgb(15,76,145), rgb(10,50,96));
+	background-image: -ms-linear-gradient(top, rgb(15,76,145), rgb(10,50,96));
+	background-image: linear-gradient(to bottom, rgb(15,76,145), rgb(10,50,96));
+}
+
+.red header h1 {
+	background-color: #a32900;
+	background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, rgb(240,60,0)), color-stop(1, rgb(163,41,0)));
+	background-image: -webkit-linear-gradient(top, rgb(240,60,0), rgb(163,41,0));
+	background-image: -moz-linear-gradient(top, rgb(240,60,0), rgb(163,41,0));
+	background-image: -o-linear-gradient(top, rgb(240,60,0), rgb(163,41,0));
+	background-image: -ms-linear-gradient(top, rgb(240,60,0), rgb(163,41,0));
+	background-image: linear-gradient(to bottom, rgb(240,60,0), rgb(163,41,0));
+}
+
+.green header h1 {
+	background-color: #008020;
+	background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, rgb(0,179,45)), color-stop(1, rgb(0,128,32)));
+	background-image: -webkit-linear-gradient(top, rgb(0,179,45), rgb(0,128,32));
+	background-image: -moz-linear-gradient(top, rgb(0,179,45), rgb(0,128,32));
+	background-image: -o-linear-gradient(top, rgb(0,179,45), rgb(0,128,32));
+	background-image: -ms-linear-gradient(top, rgb(0,179,45), rgb(0,128,32));
+	background-image: linear-gradient(to bottom, rgb(0,179,45), rgb(0,128,32));
+}
+
+header nav ul {
+	list-style-type: none; text-align: center;
+	margin: 0; padding: 0;
+	background-color: #444;
+	border: 1px solid #111; border-left: none; border-right: none;
+}
+
+header nav li {
+	display: inline;
+}
+
+header nav a {
+	display: inline-block;
+	margin: 5px 2px; padding: 6px 16px;
+	background-color: #252525; border-radius: 20px;
+	font: bold 0.9em 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #fff;
+	text-decoration: none;
+}
+
+section { display: none; }
+
+body.list nav a.list, body.add nav a.add, body.edit nav a.edit, body.settings nav a.settings {
+	color: #4fbcef; background-color: #020303;
+}
+
+
+
+body.list section.list, body.edit section.edit, body.add section.add, body.settings section.settings {
+	display: block;
+}
+
+section.list form {
+	display: block;
+	padding: 5px; background-color: #999; border-bottom: 1px solid #252525;
+}
+
+section.list input[type=search] {
+	padding: 2px 10px; font-size: 1.1em;
+	border: 1px solid #444; border-radius: 20px;
+}
+
+section.list ul {
+	margin: 0; padding: 0; list-style-type: none;
+}
+
+section.list li {
+	margin: 0; padding: 15px 10px;
+	border-bottom: 1px solid #ccc; background-color: #fff;
+	font: 1.1em Helvetica, Arial, sans-serif;
+}
+
+.item_complete {
+	width: 32px; float: left; margin-top: 3px;
+}
+
+.item_title {
+	font-size: 1.1em;
+}
+
+.item_due {
+	float: none; margin-left: 32px;
+	font-size: 0.7em; color: #777;
+}
+
+.item_delete, .item_insert { float: right; }
+
+section.add, section.edit, section.settings { padding: 12px; }
+
+img { display: inline-block; width: 100px; height: 75px; margin: -10px 0 -20px -15px; float: left; }
+</style>
+<script src="js/vendor/jquery-1.11.1.min.js"></script>
+<!-- Chapter5/html/iwebkit/javascript -->
+<script src="../../html/iwebkit/javascript/functions.js" type="text/javascript"></script>
+<script type='text/javascript'>
+			var animate = function(theStyle, scale) {
+				theStyle.webkitTransform = 'scale('+scale+')';
+			}
+</script>
+
+<script type='text/javascript'>
+/* Wrap the entire app in a closure to prevent global namespace pollution */
+(function() {
+	var Tasks = function() {
+		var cache={}, mem={};
+		var gverbose;
+
+		var imageExists = function (url) {
+		   var img = new Image();
+		   img.src = url;
+		   return img.height != 0;
+		}
+		/* Hide browser toolbar on iOS devices */
+		var nudge = function() {
+			setTimeout(function() { window.scrollTo(0,0); }, 1000);
+		}
+		
+		/* Display the view requested in the URL */
+		var jump = function() {
+			switch(location.hash) {
+				case '#add':
+					if (document.body.className == 'add'){
+						alert('jump How to redisplay?');
+					}else{
+						document.body.className = 'add';
+					}
+					break;
+				case '#settings':
+					document.body.className = 'settings';
+					break;
+				case '#mongolist':
+					document.body.className = 'mongolist';
+					break;
+				case '#edit':
+					document.body.className = 'edit';
+					break;
+				default:
+					document.body.className = 'list';
+			}
+			nudge();
+		}
+		
+		/* Call jump on page load */
+		jump();
+
+		var tables=["strategies","anlage","marketevent","trilemma","rule","tasks"];
+
+		
+		/* Switch views when the application URL changes */
+		window.addEventListener('hashchange', jump, false);
+		
+		/* Hide browser toolbars on iOS devices when device orientation changes */
+		window.addEventListener('orientationchange', nudge, false);
+		
+		/* Check if the browser supports HTML5 localStorage */
+		var localStorageAvailable = ('localStorage' in window);
+		
+		/* Load settings from localStorage and update application */
+		var loadSettings = function() {
+			if(localStorageAvailable) {
+				var name = localStorage.getItem('name'),
+					colorScheme = localStorage.getItem('colorScheme'),
+					nameDisplay = document.getElementById('user_name'),
+					nameField = document.forms.settings.name,
+					doc = document.documentElement,
+					colorSchemeField = document.forms.settings.color_scheme;
+					
+				if(name) {
+					nameDisplay.innerHTML = name+"'s";
+					nameField.value = name;
+				} else {
+					nameDisplay.innerHTML = 'My';
+					nameField.value = '';
+				}
+			
+				if(colorScheme) {
+					doc.className = colorScheme.toLowerCase();
+					colorSchemeField.value = colorScheme;
+				} else {
+					doc.className = 'blue';
+					colorSchemeField.value = 'Blue';
+				}
+			}
+		}
+		
+		/* Save settings to localStorage and update application */
+		var saveSettings = function(e) {
+			e.preventDefault();
+			if(localStorageAvailable) {
+				var name = document.forms.settings.name.value;
+				var confirmedByDefault = document.forms.settings.confirmedByDefault.value;
+			/*
+			<label name="confirmedByDefault"> confirm by default (e.g. mongoLinkedTo_drillLinks)
+				<textarea name="confirmedByDefault"></textarea>
+			</label>
+			*/
+
+				if(name.length > 0 || confirmedByDefault.length > 0) {
+					var colorScheme = document.forms.settings.color_scheme.value;
+					
+					localStorage.setItem('name', name);
+					localStorage.setItem('colorScheme', colorScheme);
+					localStorage.setItem('confirmedByDefault', confirmedByDefault);
+					
+					loadSettings();
+					alert('Settings saved successfully', 'Settings saved');
+					location.hash = '#list';
+				} else {
+					alert('Please enter your name', 'Settings error');
+				}
+			} else {
+				alert('Browser does not support localStorage', 'Settings error');
+			}
+		}
+		
+		/* Clear/reset settings from localStorage and reload defaults */
+		var resetSettings = function(e) {
+			e.preventDefault();
+			if(confirm('This will remove all application data. Are you sure?', 'Confirm reset')) {
+				if(localStorageAvailable) {
+					localStorage.clear();
+				}
+		
+				loadSettings();
+				alert('Application data has been reset', 'Reset successful');
+				location.hash = '#list';
+		
+				dropDatabase();
+			}
+		}
+		
+		/* Load settings on page load */
+		loadSettings();
+
+		/* Save settings data when Settings form is submit */
+		document.forms.settings.addEventListener('submit', saveSettings, false);
+
+		/* Reset all data when Settings form is reset */
+		document.forms.settings.addEventListener('reset', resetSettings, false);
+		
+		/* Manage prefixes and database feature detection */
+		var indexedDB = window.indexedDB || window.webkitIndexedDB || window.mozIndexedDB || window.msIndexedDB || false,
+			IDBTransaction = window.IDBTransaction || window.webkitIDBTransaction || window.mozIDBTransaction || window.msIDBTransaction || false,
+			IDBKeyRange = window.IDBKeyRange || window.webkitIDBKeyRange || window.mozIDBKeyRange || window.msIDBKeyRange || false,
+			webSQLSupport = ('openDatabase' in window),
+			db;
+			
+
+		/* Open a connection to a database, initial DB setup */
+		var openDB = function() {
+			if(indexedDB) {
+				alert('OpenDB - IndexedDB database');
+				var request = indexedDB.open('tasks', 1), 	upgradeNeeded = ('onupgradeneeded' in request);
+			
+				request.onsuccess = function(e) {
+					db = e.target.result;
+			
+					if(!upgradeNeeded && db.version != '1') {
+						/* Old method of creating object stores and indexes */
+						var setVersionRequest = db.setVersion('1');
+						setVersionRequest.onsuccess = function(e) {
+							var objectStore = db.createObjectStore('tasks', {  keyPath: 'id'  });
+							objectStore.createIndex('desc', 'descUpper', {  unique: false  });
+							loadTasks();
+						}
+					} else {
+						loadTasks();
+					}
+				}
+				/* New method of creating object stores and indexes */
+				if(upgradeNeeded) {
+					request.onupgradeneeded = function(e) {
+						db = e.target.result;
+						var objectStore = db.createObjectStore('tasks', { 
+							keyPath: 'id' 
+						});
+						objectStore.createIndex('desc', 'descUpper', { 
+							unique: false 
+						});
+					}
+				}
+			} else if(webSQLSupport) {
+				/* Open WebSQL database as fallback */
+				db = openDatabase('tasks', '1.0', 'Tasks database', (50*1024*1024));
+				var prefix = 'CREATE TABLE IF NOT EXISTS '; 
+				var suffix = ' (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, desc TEXT, linked TEXT, complete BOOLEAN )';
+				db.transaction(function(tx) {
+
+				
+				console.log('openDB - *** Loop throu all the tasks using jQuery');
+				var tns = document.getElementById('tns');
+
+					var sql = prefix+'tasks'+ suffix;
+					tx.executeSql(sql, [], loadTasks('','tasks'));
+					sql = prefix+'strategy'+suffix;
+					tx.executeSql(sql, [], loadTasks('','strategies'));
+					sql = prefix+'anlage'+suffix;
+					tx.executeSql(sql, [], loadTasks('','anlage'));
+					sql = prefix+'marketevent'+suffix;
+					tx.executeSql(sql, [], loadTasks('','marketevent'));
+
+				});
+
+
+
+			}
+		} //END openDB()
+		openDB();
+		
+		/* If no tasks exist or a search returned zero results, show an empty message */
+		var createEmptyItem = function(query, taskList) {
+			var emptyItem = document.createElement('li');
+			if(query.length > 0) {
+				emptyItem.innerHTML = '<div class="item_title">'+
+					'No tasks match your query <strong>'+query+'</strong>.'+
+					'</div>';
+			} else {
+				emptyItem.innerHTML = '<div class="item_title">'+
+					'No tasks to display. <a href="#add">Add one</a>?'+
+					'</div>';
+			}
+			taskList.appendChild(emptyItem);
+		}
+
+
+		var serializeString = function(jsonAll){
+			alert ('serializeString\n'+jsonAll);
+		}
+		var srlz=false;
+		var jsonAll='';
+		var jsonTask = function(task) {
+			return '{ "name": "'+task.name+'", "desc": "'+task.desc+'", "linked": "'+task.linked+'"},';
+		}
+//----		
+		var serialize = function(){
+			srlz=true;
+
+		}
+		document.getElementById('SearchNSave').onclick = serialize;
+//Util -----------
+//var explainObject
+
+//Math ---------------------
+var corrArr = function(htHistZ,htHistY){
+	var verbose=true;
+	var repmis=true;
+
+	
+	if(!htHistY) {
+		alert("corrArr SPY is empty");
+		return htHistZ;
+	}else if(!htHistZ) {
+		alert("corrArr Analge is empty but SPY is loaded");
+		return htHistZ;
+	}
+
+	for (var key in htHistZ){
+		if (key=="html") continue;
+		var granZ=htHistZ[key];
+		var granY=htHistY[key];
+		if (!granY) {
+			if (!granZ) alert("corrArr gran="+key+" for both, SPY and Anlage are empty.");
+			else {
+
+				alert("corrArr gran="+key+" for SPY is empty. explainObject(granY)=\n"
+				+explainObject(granY)+" \n\nAnlage has records="+Object.keys(granZ).length);
+			}
+			continue;
+		}
+
+		var corr = [];
+		console.log("corrArr htHistY["+key+"]="+htHistY[key]);
+
+		var trc="";
+		var arrZ = granZ["AdjPrice"];
+		var arrY = granY["AdjPrice"];
+
+		var arrZd = granZ["Date"];
+		var arrYd = granY["Date"];
+
+		alert("corrArr key="+key+"\n\ngranZ[AdjPrice]="+granZ["AdjPrice"]+"\n\ngranZ[Date]="+granZ["Date"]);
+
+		var sum_Zi_x_Yi=0;
+		var sumZi=0;
+		var sumYi=0;
+		var sum_SqZi=0;
+		var sum_SqYi=0;
+		//var nom, denom;
+
+		var ssz;
+		var ssy;
+		var sszy;
+		var cntSample=0;
+		var cntZEmpty=0, cntYEmpty=0;
+		for (var i=(arrZ.length-1); i>-1; i--){
+			if (!arrZd[(1*i-cntZEmpty)] || !arrYd[(1*i-cntYEmpty)]){
+				console.log("Correlations "+trc);				
+				if (!confirm("Continue corrArr? \nERROR in corrArr - after reconcilliation: arrZd["+(1*i-cntZEmpty)+"]:"+arrZd[(1*i-cntZEmpty)]+"!=arrYd["+(1*i-cntYEmpty)+"]:"+arrYd[(1*i-cntYEmpty)])){ 
+					alert("Correlations "+trc);
+					break;
+				}
+			} else if (arrZd[(1*i-cntZEmpty)]==arrYd[(1*i-cntYEmpty)]){
+				cntSample++;
+				arrZ[(1*i-cntZEmpty)]=arrZ[(1*i-cntZEmpty)].replace(",","");
+				arrY[(1*i-cntYEmpty)]=arrY[(1*i-cntYEmpty)].replace(",","");
+				sum_Zi_x_Yi+=arrZ[(1*i-cntZEmpty)]*arrY[(1*i-cntYEmpty)];
+				sumZi+=arrZ[(1*i-cntZEmpty)]*1;
+				sumYi+=arrY[(1*i-cntYEmpty)]*1;
+				sum_SqZi+=Math.pow(arrZ[(1*i-cntZEmpty)],2);
+				sum_SqYi+=Math.pow(arrY[(1*i-cntYEmpty)],2);
+
+				
+				sszy = sum_Zi_x_Yi - (sumZi*sumYi)/cntSample;
+				ssz = sum_SqZi - Math.pow(sumZi,2)/cntSample;
+				ssy = sum_SqYi - Math.pow(sumYi,2)/cntSample;
+
+				/* http://www.mathsisfun.com/data/correlation.html
+				nom=(i)*sum_Zi_x_Yi-sum_SqZi*sum_SqYi;
+				denom = (Math.sqrt( (i)*sum_SqZi-Math.pow(sumZi,2) )*Math.sqrt( (i)*sum_SqYi-Math.pow(sumYi,2) ));	
+
+				nom=(i+1)*sum_Zi_x_Yi-sum_SqZi*sum_SqYi;
+				denom = (Math.sqrt( (i+1)*sum_SqZi-Math.pow(sumZi,2) )*Math.sqrt( (i+1)*sum_SqYi-Math.pow(sumYi,2) ));	
+				*/
+				if (i<(arrZ.length-10)) {
+					//corr2[i]=nom/denom; 
+					corr[1*i-cntZEmpty]=(sszy/(Math.sqrt(ssz*ssy))).toFixed(2);
+				
+					if (verbose){	
+						if (verbose && !confirm ("Continue verbose?\ncorrArr corr["+(i*1-cntZEmpty)+" i.e. "+arrZd[(i*1-cntZEmpty)]+"]="+//corr2[i]+"="+nom+" / "+denom+"\n"+
+							corr[(i*1-cntZEmpty)]+"="+(sszy).toFixed(2)+" / "+(Math.sqrt(ssz*ssy)).toFixed(2)+"\n\n"+"arrZ[i]="+arrZ[(1*i-cntZEmpty)]+", arrY[i]="+arrY[(1*i-cntYEmpty)]+ 
+							", sumZi="+sumZi.toFixed(2)+", sumYi="+sumYi.toFixed(2)+", sum_Zi_x_Yi="+sum_Zi_x_Yi.toFixed(2)+
+							", sum_SqZi="+sum_SqZi.toFixed(2)+", sum_SqYi="+sum_SqYi.toFixed(2)) 
+						) verbose="";
+						
+						trc+="corr("+arrZd[(i*1-cntZEmpty)]+")="+corr[(i*1-cntZEmpty)]+"\n";
+					}
+				}
+			}else{
+					if (arrZd[(i*1-cntZEmpty)].length>100) alert("ERROR in corrArr - date shifted: arrZd["+(1*i-cntZEmpty)+"].length="+arrZd[(1*i-cntZEmpty)].length+"!="+arrYd[(1*i-cntYEmpty)].length);
+					else {
+						if (repmis && !confirm("Continue report mismatch in corrArr?\ndate shifted: arrZd["+(1*i-cntZEmpty)+"]= "+arrZd[(1*i-cntZEmpty)]+"!="+arrYd[(1*i-cntYEmpty)])) repmis="";
+						
+						if (Date.parse(arrZd[(1*i-cntZEmpty)])>Date.parse(arrYd[(1*i-cntYEmpty)])){
+							arrYd.pop();							
+							cntYEmpty++;
+						}else{
+							arrZd.pop();
+							cntZEmpty++;
+							
+						}
+						if (repmis) alert("After shift: arrZd["+i+"] "+arrZd[(i*1-cntZEmpty)]+"?="+arrYd[(i*1-cntYEmpty)]+"; length of (arrZd="+arrZd.length+", arrYd="+arrYd.length);
+						
+						i++;
+						
+					}
+					console.log("corrArr ERROR - date shifted: arrZd["+i+"]="+arrZd[i]+"\n!="+arrYd[i]);
+			}
+		} //END for (var i=0; i<arrZ.length; i++){
+		alert ("corrArr end of key="+key+", trc="+trc);
+		granZ["corr"]=corr;
+		htHistZ[key]=granZ;
+
+
+	} //END for (var key in htHistZ)
+	alert("corrArr FINISHED, see result next!");
+	for (var test in htHistZ){
+		var gran = htHistZ[test];
+		alert("corrArr FINISHED, "+test+"[corr]="+gran["corr"]);
+	}
+	return htHistZ;
+
+}//END corrArr
+
+//showTask ----------------------
+		var inlineYahooHistoricalPrices= function(maUrl, maParam, linkedTo){ 
+			if (confirm("ABORT LONG FUNC? inlineYahooHistoricalPrices(maUrl, "+maParam+", linkedTo)")) return;
+			//if (ajax_links){ yahoo+='<br/><b>InsiderTransaction</b>: <del><small>'+inlineYahooAnalystInsiderTransaction("http://finance.yahoo.com/q/in", task.name+"+Competitors")+'</small></del><br/>'; }						
+			//else { yahoo+='<a href="http://finance.yahoo.com/q/ae?s='+task.name+'+Analyst+Estimates">AnalystEstimates</a>, ';}
+			var ret="Refresh-ShowMore";
+			//histP["Daily"]
+			var histP={"Daily" : "" , "Weekly" : "&g=w", "Monthly" : "&g=m"};
+			var verbose = true;
+			var tabObj;
+			if (cache["inlineYahooHistoricalPrices"+maParam]) {
+				histP=cache["inlineYahooHistoricalPrices"+maParam];
+				for (var gra in histP) {
+					ret+="<p><b>Granularity: "+gra+" table </b></p>";
+					if (gra.indexOf("Data")>0) ret+="<p><i>Data Structures are not printed</i></p>";
+					else if(gra=="html") ret += histP[gra]; 
+					else {
+						var arrCols=[];
+						var graHtml;
+						tabObj=histP[gra];
+						if (tabObj){
+							ret+=gra+"<table><tr><th></th>";
+							var rcnt=0;
+							for (var col in tabObj){
+								if (col=="html") graHtml=tabObj[col];
+								else{
+									ret+="<th>"+col+"</th>";
+									arrCols.push(col);
+									if (verbose) {
+										if (!conform("verbose 2 continue?\nhistP["+gra+"]["+col+"]="+tabObj[col]))verbose="";
+									}
+									ret+="<p><i>Column: "+col+"</i></p>";
+									console.log("histP["+gra+"]["+col+"]="+explainObject(tabObj[col]),0,1,'verbose');
+								}
+							}
+							ret+="</tr>";
+							var cell;
+
+							alert("tabObj["+arrCols[0]+"].length="+Object.keys(tabObj[arrCols[0]]).length+"\n"+tabObj[arrCols[0]]);
+							for (var i=0; i<Object.keys(tabObj[arrCols[0]]).length; i++){
+								ret+="<tr><td>dummy</td>";
+
+								for (var td in arrCols) { 
+									cell=tabObj[arrCols[td]]; 
+									if (cell) {
+										 if (cell[i]) ret+="<td>"+cell[i]+"</td>";
+
+									}else ret +="<td>tabObj["+td+"]=null</td>";
+									//console.log("td["+i+"]="+cell[i]);
+								}
+								ret+="</tr>";
+							}
+							ret+="</table>Above is CORRELATION for "+gra;
+							ret+=graHtml;
+						}else{
+							alert("Cached inlineYahooHistoricalPrices"+maParam+", gra="+gra+" is empty.")
+						}
+					}
+
+  				}//END for (var gra in histP)
+				return ret;
+			}
+
+			if  (linkedTo){
+					var res = linkedTo.split(",");						
+					for (var i = res.length - 1; i >= 0; i--) {
+						if ((res[i].toUpperCase==res[i]) && res[i].length<7 && confirm("Find CORR for "+res[i]+"?")) {
+							if(!cache["inlineYahooHistoricalPrices"+res[i]]){
+								if (confirm("LOAD "+res[i]+" for CORR-AN")){
+									inlineYahooHistoricalPrices(maUrl, res[i]);
+								}
+							}
+						}	
+						 	
+					} 
+			 
+			}
+			
+			
+
+			if (!linkedTo && maParam!="SPY" && !cache["inlineYahooHistoricalPricesSPY"] ){ 
+				if (confirm("cache[inlineYahooHistoricalPricesSPY] is empty. Run  inlineYahooHistoricalPrices("+maUrl+", SPY)?")){
+					inlineYahooHistoricalPrices(maUrl, "SPY");
+				}
+			} 
+
+			//if ()
+
+			//$.get( maUrl,{s : maParam},function( html ) {
+			//async: false,
+			for (var gran in histP){	
+				if (confirm("gran="+gran+", url="+maUrl+"?s="+maParam+histP[gran]+", run inlineYahooHistoricalPrices? ")){
+				    $.ajax({
+				        url: maUrl+"?s="+maParam+histP[gran],
+				        type: 'GET',
+				        async: false,
+				        cache: false,
+				        timeout: 5000,
+				        error: function(){
+				        	alert ( "inlineYahooHistoricalPrices $.ajax({ error: calling "+maUrl+"?s="+maParam);
+				            return true;
+				        },
+				        success: function (html) {
+		       				if (verbose){
+		       					if (!confirm('CONTINUE VERBOSE?\ninlineYahooHistoricalPrices('+maParam+') http request: data.length=' + html.length)) verbose="";
+		       				}
+		       				var temp = html.substring(html.indexOf("Previous</span>"), html.lastIndexOf("Previous</span>"));
+		       				//***console.log("inlineYahooHistoricalPrices "+maParam+" PRELIM="+temp);
+							//temp = temp.substring(temp.indexOf("<table"),temp.indexOf("<table")+18000);
+							temp = temp.substring(temp.indexOf("<table"),temp.lastIndexOf("</table>")+8);
+							//temp+='</tr></table>';
+							if (temp) {
+								if (verbose){ alert("inlineYahooHistoricalPrices("+maParam+") Daily table length="+temp.length); }
+								histP["html"]=temp;
+								var jqobj = $.parseHTML( temp );
+								var htHist={}, arrDate=[], arrVol=[], arrAdjPrice=[];
+								//var htHistSPY=cache["inlineYahooHistoricalPricesSPY"];
+
+								//var arrDateSPY=htHistSPY["Date"];
+								//var arrAdjPriceSPY=htHistSPY["AdjPrice"];
+								$.each( jqobj, function( i, table ) {
+
+								  	var str="\n"+i+": " + table.nodeName+", rows="+table["rows"].length+
+								  	", class="+table.getAttribute("class")+", childElementCount="+table.childElementCount;
+								    var rows=table.getElementsByTagName("tr");
+								    var cells;
+								    var cntRows=0;
+
+								    //var getCorrArr(htHist,htHistSPY);
+								        
+								    if(rows && rows.length>10){ 
+								    	str+=", table.getElementsByTagName(tr).length="+table.getElementsByTagName("tr").length;
+										var cntrows=0;
+										var cntrowsValid=0;
+										$.each(rows, function( j, row ) {
+											cntrows++;
+											try {  
+												cells=row.getElementsByTagName("td");
+												//console.log("Date="+cells[0].html()+", vol="+cells[5].html()+", "+cells[6].html());
+												var cnt=0;
+												var day, vol, adjPrice;
+												var allCells="allCells=";
+												$.each(cells, function( k, cell ) {
+													if (cell) allCells+=cell.innerHTML+", ";
+													//for (var m in cell){ if(cell[m]) allCells+=m+"="+cell[m]+", "; }
+													//console.log("k="+k+", cell.html="+cell);
+													if (cnt==0) {
+														if (cell && cell.innerHTML && cell.innerHTML.length<30) day=cell.innerHTML;	
+														else{
+															if (verbose) alert("inlineYahooHistoricalPrices"+maParam+", INVALID DAY in row "+cntrows+"! cell="+cell+", Valid Rows so far: "+cntrowsValid);
+															console.log("inlineYahooHistoricalPrices"+maParam+", INVALID DAY in row "+cntrows+"! day="+cell+", Valid Rows so far: "+cntrowsValid);
+															day="";
+														}
+													}
+													if (cnt==5) vol=cell.innerHTML;							
+													if (cnt==6) adjPrice=cell.innerHTML;
+													cnt++;
+													
+												});
+												if (day && vol && adjPrice) {
+													arrAdjPrice.push(adjPrice);
+													arrDate.push(day);
+													arrVol.push(vol);
+													cntrowsValid++;
+												} else { 
+													if (verbose) {		
+														if (!confirm("INVALID DATA! day="+day+", vol="+vol+", AdjPrice "+adjPrice+", see console for ROW="+cntrows+", Valid Rows so far: "+cntrowsValid)) verbose="";
+													}
+													console.log("INVALID DATA allCells="+allCells);
+				
+												}
+												console.log("ROW="+cntrows+"\n"+allCells);
+											}catch(err)  {
+												alert("Error: " + err.message + "\n\ncells="+cells);
+											}
+											
+										});
+										htHist["html"]=temp;
+										htHist["Date"]=arrDate;
+										htHist["Volume"]=arrVol;
+
+
+										htHist["AdjPrice"]=arrAdjPrice;
+										histP[gran]=htHist;
+										
+										/*** MOVED OUTSLIDE OF ...
+										if (maParam!="SPY") {
+											if (cache["inlineYahooHistoricalPricesSPY"] && arrAdjPrice && arrDate) {
+												histP=corrArr(histP,cache["inlineYahooHistoricalPricesSPY"]);
+											}
+											else {
+												alert ("ERROR: either cache[inlineYahooHistoricalPricesSPY] is empty, or arrAdjPrice="+arrAdjPrice.length+" or arrDate="+arrDate);
+												//***console.log("explainObject(cache)="+explainObject(cache));
+											}
+										}*/
+										
+
+										if(table.children) str+=", table.children.length="+ table.children.length;
+										if(table.childNodes) str+=", table.childNodes.length="+ table.childNodes.length;
+										alert("HTML2JSON "+maParam+": htHist[Date].length="+arrDate.length+", htHist[Volume].length="+arrVol.length+", htHist[AdjPrice].length="+arrAdjPrice.length);	
+
+
+
+									} //END rows
+									//else alert("HTML2JSON "+maParam+":  EMPTY TABLE");
+								}); //END $.each( jqobj, function( i, table ) {
+								
+								
+							}else{
+								alert("inlineYahooHistoricalPrices("+maParam+") dindn't find "+gran+" table in  html.length="+html.length+" url="+maUrl+"?s="+maParam+histP[gran]);
+								histP[gran]="HistoricalPrices Not found :(";
+							}//Object.keys(a).length;
+							alert (" Finished "+maParam+": histP["+gran+"].length="+Object.keys(histP[gran]).length);
+							cache["inlineYahooHistoricalPrices"+maParam]=histP;
+							
+		    			}//END success: function (html)
+					});
+				} //END if (confirm("gran="+gran+"...
+			}
+			if (maParam=="SPY") alert (" Finished SPY: cache[inlineYahooHistoricalPricesSPY]="+cache["inlineYahooHistoricalPricesSPY"]);
+			else{
+				//RUN CORRELATION
+				if (confirm ("Run Correlation?")){
+
+									
+					if (cache["inlineYahooHistoricalPricesSPY"]) {
+						histP=corrArr(histP,cache["inlineYahooHistoricalPricesSPY"]);
+					}
+					else {
+						alert ("ERROR: either cache[inlineYahooHistoricalPricesSPY] is empty, or arrAdjPrice="+arrAdjPrice.length+" or arrDate="+arrDate);
+						//***console.log("explainObject(cache)="+explainObject(cache));
+					}
+				}
+				alert (' again to see resustus of Daily inlineYahooHistoricalPrices. Finished caching cache[inlineYahooHistoricalPrices'+maParam+']');	
+
+			}
+
+			/***
+			$.get(
+	    			maUrl,{s : maParam+"&g=w"},function( html ) {
+	       				alert('inlineYahooHistoricalPrices('+maParam+'&g=w) http request: data.length=' + html.length);
+	       				ret="";
+	       				var temp = html.substring(html.indexOf("Previous</span>"), html.lastIndexOf("Previous</span>"));
+	       				console.log("inlineYahooHistoricalPrices PRELIM="+temp);
+						//temp = temp.substring(temp.indexOf("<table"),temp.indexOf("<table")+18000);
+						temp = temp.substring(temp.indexOf("<table"),temp.lastIndexOf("</table>")+8);
+						//temp+='</tr></table>';
+						if (temp) {
+							alert("inlineYahooHistoricalPrices('+maParam+') Weekly table length="+temp.length);
+							histP["Weekly"]=temp;
+							
+						}else{
+							alert("inlineYahooHistoricalPrices('+maParam+') dindn't find Weekly table in  html.length="+html.length);
+							histP["Weekly"]="InsiderTransactions Not found :(";
+						}
+						cache["inlineYahooHistoricalPrices"+maParam]=histP;
+						console.log("inlineYahooHistoricalPrices Weekly="+temp);
+						//alert(ret);
+						alert('Run again to see resustus of Daily inlineYahooHistoricalPrices. Finished caching cache[InsiderTransactions'+maParam+']');	
+
+	    			}
+				);
+				***/	
+
+
+		}
+
+
+		var inlineYahooEarningsCalendar = function(maUrl, maParam){ 
+			var ret="BeforeAjaxCall";
+			var msg="inlineYahooEarningsCalendar is under Construction!\n";
+			alert(msg);
+			if (cache["inlineYahooEarningsCalendar"+maParam]) {
+				return cache["inlineYahooEarningsCalendar"+maParam];
+			}
+			ret="NOT IMPLEMENTED YET: inlineYahooEarningsCalendar(maUrl="+maUrl+", maParam="+maParam+")";	
+			return ret;
+		}
+
+		var inlineYahooInsiderTransactions= function(maUrl, maParam){ 
+			//if (ajax_links){ yahoo+='<br/><b>InsiderTransaction</b>: <del><small>'+inlineYahooAnalystInsiderTransaction("http://finance.yahoo.com/q/in", task.name+"+Competitors")+'</small></del><br/>'; }						
+			//else { yahoo+='<a href="http://finance.yahoo.com/q/ae?s='+task.name+'+Analyst+Estimates">AnalystEstimates</a>, ';}
+			var ret="Insider Transactions";
+			
+			if (cache["inlineYahooInsiderTransactions"+maParam]) {
+				return cache["inlineYahooInsiderTransactions"+maParam];
+			}
+			
+			$.get(
+    			maUrl,
+    			{s : maParam},
+    			function( html ) {
+       				alert('inlineYahooInsiderTransactions('+maParam+') http request: data.length=' + html.length);
+       				ret="";
+       				var temp = html.substring(html.indexOf("Get Insider Transactions for:")-200, html.indexOf("Data provided by"));
+       				console.log("inlineYahooInsiderTransactions PRELIM="+temp);
+					//temp = temp.substring(temp.indexOf("<table"),temp.indexOf("<table")+18000);
+					temp = temp.substring(temp.indexOf("<table"),temp.lastIndexOf("</table>")+8);
+					temp+='</tr></table>';
+					if (temp) {
+						alert("inlineYahooInsiderTransactions('+maParam+') found table length="+temp.length);
+						cache["inlineYahooInsiderTransactions"+maParam]=temp;
+					}else{
+						alert("inlineYahooInsiderTransactions('+maParam+') dindn't find table in  html.length="+html.length);
+						cache["inlineYahooInsiderTransactions"+maParam]="InsiderTransactions Not found :(";
+					}
+					console.log("inlineYahooInsiderTransactions="+temp);
+					//alert(ret);
+					alert('Run again to see resustus of inlineYahooInsiderTransactions. Finished caching cache[InsiderTransactions'+maParam+']');	
+
+    			}
+			);
+
+			return ret;
+		}
+		var inlineYahooHeadlines= function(maUrl, maParam){ 
+			//if (ajax_links){ yahoo+='<br/><b>Headlines</b>: <del><small>'+inlineYahooHeadlines("http://finance.yahoo.com/q/h", task.name+"+Competitors")+'</small></del><br/>'; }						
+			//else { yahoo+='<a href="http://finance.yahoo.com/q/ae?s='+task.name+'+Analyst+Estimates">AnalystEstimates</a>, ';}
+			var ret="Refresh-ShowMore";
+			
+			if (cache["inlineYahooHeadlines"+maParam]) {
+				return cache["inlineYahooHeadlines"+maParam];
+			}	
+			$.get(
+    			maUrl,
+    			{s : maParam},
+    			function( html ) {
+       				alert('inlineYahooHeadlines('+maParam+') http request: data.length=' + html.length);
+       				ret="";
+       				var temp = html.substring(html.indexOf("Get Headlines for:")-200, html.indexOf("View headlines from:")+500);
+       				//console.log("inlineYahooHeadlines PRELIM="+temp);
+					
+					temp = temp.substring(temp.indexOf("<table"),temp.lastIndexOf("</table>")+8);
+					
+					if (temp) {
+						alert("inlineYahooHeadlines('+maParam+') found table length="+temp.length);
+						cache["inlineYahooHeadlines"+maParam]=temp;
+					}else{
+						alert("inlineHeadlines('+maParam+') dindn't find table in  html.length="+html.length);
+						cache["inlineHeadlines"+maParam]="Headlines Not found :(";
+					}
+					//console.log("inlineYahooHeadlines="+temp);
+					//alert(ret);
+					alert('Run again to see resustus of inlineHeadlines. Finished caching cache[Headlines'+maParam+']');	
+
+    			}
+			);
+			return ret;
+
+		}
+		var inlineYahooIndustry = function(maUrl, maParam){ 
+			var ret="Refresh-ShowMore";
+			var trc="";
+			if (cache["inlineYahooIndustry"+maParam]) {
+				ret="<b>YahooIndustry:</b><br/>";
+				var ind = cache["inlineYahooIndustry"+maParam];
+				for (var i in ind){
+					ret+=i+"<br/>"+ind[i]+"<br/><br/>";
+				}
+				return ret;
+				
+			}	
+			var drill = {};
+			
+			//Related Industries(3d Step) , Market Capitalization, Link More Upcoming Events
+			$.get( maUrl, {s : maParam}, function( htm ) {
+				    alert('inlineYahooIndustry('+maParam+') http request: data.length' + htm.length);
+		       		ret="";
+		       		var temp;
+		       		var iname;
+		       		if (htm.indexOf("Industry:")>0){
+			       		temp = htm.substring(htm.indexOf("Industry:"));
+			       		//console.log("inlineYahooIndustry2="+temp);
+			       		temp=temp.substring(temp.indexOf("http://biz.yahoo.com/ic/"));
+			       		iname=temp.substring(temp.indexOf(">")+1, temp.indexOf("</a>"));
+			       		alert("Drilling Down {Industry="+iname+"}");
+						drill["iname"]=iname;
+
+			       		//console.log("inlineYahooIndustry2="+temp);
+			       		temp=temp.substring(0, temp.indexOf(".html")+5);	
+			       		//http://biz.yahoo.com/ic/314.html
+
+						console.log("inlineYahooIndustry Industry "+iname+" LINK="+temp);
+									
+						if (temp){
+							$.get( temp, {}, function( html ) {
+			       				
+					       		alert('inlineYahooIndustry('+temp+') http request: data.length' + html.length);
+			       				ret="";
+			       				alrt="";
+			       				//Related Industries
+			       				if (html.indexOf("Related")>0){
+				       				var temp = html.substring(html.indexOf("Related")-150, html.indexOf("Related")+2500);
+				       				//temp = temp.substring(0, html.indexOf("Industries")+2000);
+				       				console.log("inlineYahooIndustry PRELIMINARY Related Industries="+temp);
+				       				alrt+="\n inlineYahooAnalystEstimates PRELIMINARY Related Industries length="+temp.length;
+				       				temp = temp.substring(temp.indexOf("<table" ), temp.lastIndexOf("/table>")+7 );
+									console.log("inlineYahooIndustry Related Industries="+temp);
+									alrt+="\n FINAL Related Industries length="+temp.length;
+									drill["Related Industries"]=temp;
+								}
+								else {
+									drill["Related Industries"]="inlineYahooIndustry could not find 'Related Industries'";
+									alert("Related Industries");							
+								}
+
+								//Market Capitalization
+								if (html.indexOf("Market Capitalization")>0){
+									var temp = html.substring(html.indexOf("Market Capitalization")-300, html.indexOf("Market Capitalization")+5000);
+									alrt+="\n inlineYahooIndustry PRELIMINARY 'Market Capitalization' length="+temp.length;	
+									console.log("inlineYahooIndustry Market Capitalization="+temp);
+									temp = temp.substring(temp.indexOf("<table" ));
+									temp = temp.substring(0, temp.indexOf("/table>")+7 );
+									alrt+="\n FINAL 'Market Capitalization' length="+temp.length;	
+									//alert("inlineYahooAnalystEstimates Market Capitalization length="+temp.length);
+									drill["Market Capitalization"]=temp;
+								}
+								else {
+									drill["Market Capitalization"]="inlineYahooIndustry could not find 'Market Capitalization'";
+									alert(drill["Market Capitalization"]);
+								}
+
+								//Upcoming Events
+								if (html.indexOf("Upcoming Events")>0){	
+									//<table
+									var temp = html.substring(html.indexOf("Upcoming Events")-200, html.indexOf("More Upcoming Events...")+100);
+									alrt+="\n inlineYahooIndustry PRELIMINARY 'Upcoming Events' length="+temp.length;	
+									console.log("inlineYahooIndustry PRELIMINARY Upcoming Events="+temp);
+									temp = temp.substring(temp.indexOf("<table"), temp.lastIndexOf("/table>")+7 );
+									alrt+="\n FINAL 'Upcoming Events' length="+temp.length;
+									//alert("inlineYahooIndustry Upcoming Events length="+temp.length);	
+									drill["Upcoming Events"]=temp;
+								}
+								else {								
+									drill["Upcoming Events"]="inlineYahooIndustry could not find 'More Upcoming Events'";
+									alert(drill["Upcoming Events"]);
+								}
+								
+								// Recent Events
+								if (html.indexOf("Recent Events")>0){	
+									//<table
+									var temp = html.substring(html.indexOf("Recent Events")-200, html.indexOf("More Recent Events...")+100);
+									alrt+="\n inlineYahooIndustry PRELIMINARY 'Recent Events' length="+temp.length;	
+									console.log("inlineYahooIndustry Recent Events="+temp);
+
+									temp = temp.substring(temp.indexOf("<table"), temp.lastIndexOf("/table>")+7 );				
+									alrt+="\n FINAL Recent Events length="+temp.length;	
+									//"<table><tr><td>"
+									drill["Recent Events"]=temp;
+								}
+								else {
+									drill["Recent Events"]="inlineYahooIndustry could not find 'Recent Events'";
+									alert(drill["Recent Events"]);
+								}
+								alert(alrt);	
+			       			});
+						}
+						else {
+							alert("Link is broken {Industry : "+temp+"}");
+							drill["ERROR Did not find Industry"]=temp;
+						}
+						cache["inlineYahooIndustry"+maParam]=drill;
+					}
+					else alert("inlineYahooIndustry could not find 'Industry:'");
+	    		}
+			);
+			return ret; 
+		}
+
+
+
+		var inlineYahooCashFlow= function(maUrl, maParam){ 
+			var ret="Refresh-ShowMore";
+			var ann="";
+			if (maUrl.indexOf("annual")){
+				ann="Annual";
+				if (cache["inlineYahooCashFlowAnnual"+maParam]) { return cache["inlineYahooCashFlowAnnual"+maParam]; }
+			}else{	
+				if (cache["inlineYahooCashFlow"+maParam]) { return cache["inlineYahooCashFlow"+maParam]; }
+			}	
+			$.get(
+    			maUrl,
+    			{s : maParam},
+    			function( html ) {
+       				ret="";
+       				var temp = html.substring(html.indexOf("Period Ending")-150, html.indexOf("Period Ending")+12000);
+					console.log("inlineYahooCashFlow"+ann+" PRELIM="+temp);
+					temp = temp.substring(temp.toLowerCase().indexOf("<table"), temp.toLowerCase().lastIndexOf("</table>")+8);
+					//temp = temp.substring(0,temp.indexOf("</table>")+8);
+					//alert(temp);
+
+					cache["inlineYahooCashFlow"+ann+maParam]=temp;
+					console.log("inlineYahooCashFlow"+ann+"="+temp);
+					//alert(ret);
+					alert('Run again to see resustus of inlineYahooAnalystEstimates. Finished caching cache[AnalystEstimates'+maParam+']');	
+
+    			}
+			); 
+			return ret;
+		}
+
+		var inlineYahooAnalystEstimates = function(maUrl, maParam){ 
+			var ret="Refresh-ShowMore";
+			if (cache["inlineYahooAnalystEstimates"+maParam]) {
+				return cache["inlineYahooAnalystEstimates"+maParam];
+			}	
+			
+			$.get(
+    			maUrl,
+    			{s : maParam},
+    			function( html ) {
+       				alert('inlineYahooAnalystEstimates('+maParam+') http request: data.length=' + html.length);
+       				ret="";
+       				var temp = html.substring(html.indexOf("Get Analyst Estimates for:")-100);
+					//temp = temp.substring(temp.indexOf("<table"),temp.indexOf("<table")+18000);
+					temp = temp.substring(temp.indexOf("<table"),temp.indexOf("</tr></table></td></tr></table></td>")+36);
+					temp+='</tr></table>';
+					if (temp) {
+						alert("inlineYahooAnalystEstimates('+maParam+') found table length="+temp.length);
+						cache["inlineYahooAnalystEstimates"+maParam]=temp;
+					}else{
+						alert("inlineYahooAnalystEstimates('+maParam+') dindn't find table in  html.length="+html.length);
+						cache["inlineYahooAnalystEstimates"+maParam]="AnalystEstimates Not found :(";
+					}
+					console.log("inlineYahooAnalystEstimates="+temp);
+					//alert(ret);
+					alert('Run again to see resustus of inlineYahooAnalystEstimates. Finished caching cache[AnalystEstimates'+maParam+']');	
+
+    			}
+			);
+			return ret;
+
+		}	
+		
+		var inlineYahooCompetitors = function(maUrl, maParam){ 
+			var ret="Refresh-ShowMore";
+			if (cache["inlineYahooCompetitors"+maParam]) {
+				return cache["inlineYahooCompetitors"+maParam];
+			}	
+			
+
+			$.get(
+    			maUrl,
+    			{s : maParam},
+    			function( html ) {
+       				alert('inlineYahooCompetitors('+maParam+') http request: data.length=' + html.length);
+       				ret="";
+       				var temp = html.substring(html.indexOf("Direct Competitor Comparison")-100);
+					temp = temp.substring(temp.indexOf("<table"));
+					temp = temp.substring(0,temp.indexOf("</table>")+8);
+					//alert(temp);
+					cache["inlineYahooCompetitors"+maParam]=temp;
+					//console.log("inlineYahooCompetitors="+temp);
+					//alert(ret);
+					alert('Run again to see resustus of inlineYahooCompetitors. Finished caching cache[inlineYahooCompetitors'+maParam+']');	
+
+    			}
+			);
+			return ret;
+
+		}	
+
+		var inlineYahooKeyStatistics = function(maUrl, maParam){ 
+			var ret="Refresh-ShowMore";
+			if (cache['inlineYahooKeyStatistics'+maParam]) {
+				ret="<table>";
+				var maKeys = cache['inlineYahooKeyStatistics'+maParam];
+				for (var i in maKeys) {
+					if (i=="hr") {
+						ret+="<tr><td></td><td></td></tr>";
+					}else{
+						ret+="<tr><td>"+i+"</td><b>"+maKeys[i]+"</b></tr>";
+					}	
+				}	
+				return ret+"</table>";
+
+			}	
+			
+			var keys = { 
+				"Market Cap" : "", 
+				"Enterprise Value" : "", 
+				"Trailing P/E" : "",
+				"Forward P/E" : "",
+				"PEG Ratio" : "",
+				"Price/Sales" : "",
+				"hr" : "",
+				"Total Cash" : "",
+				"Total Cash Per Share" : "",
+				"Total Debt" : "",
+				"Total Debt/Equity" : "",
+				"Current Ratio" : "",
+				"hr" : "",
+				"% Held by Insiders" : "",
+				"% Held by Institutions" : "",
+				"Shares Short" : "",
+				"Short Ratio" : "",
+				"Short % of Float" : "",
+				"Shares Short" : "",
+				"hr" : "",
+				"Forward Annual Dividend Rate" : "",
+				"Forward Annual Dividend Yield" : "",
+				"Trailing Annual Dividend Yield" : "",
+				"Trailing Annual Dividend Yield" : "",
+				"5 Year Average Dividend Yield" : "",
+				"Payout Ratio" : "",
+				"Dividend Date" : "", 
+				"Ex-Dividend Date" : ""
+			};
+			
+
+			
+			$.get(
+    			maUrl,
+    			{s : maParam, async : false},
+    			function( html ) {
+       				alert('inlineYahooKeyStatistics('+maParam+') http request: data.length=' + html.length);
+       				ret="";
+       				var temp;
+       				var j=0;
+					for (var i in keys) {
+
+						if (html.indexOf(i)>0){
+
+							temp=html.substring(html.indexOf(i), html.indexOf(i)+170);
+												
+							temp=temp.substring(temp.indexOf("<td"));
+							//alert (temp+"\n\n</td>="+temp.indexOf("</td>"));	
+							keys[i] = temp.substring(0,temp.indexOf("</td>")+5);						
+							//ret+=i+"="+keys[i]+"\n\n";
+						} else {
+							if (j) console.log("inlineYahooKeyStatistics NOT FOUND: "+i);
+							else console.log("inlineYahooKeyStatistics NOT FOUND: "+i+"\nhtml="+html); 							
+							j++;
+						}
+
+								
+					}
+					cache['inlineYahooKeyStatistics'+maParam]=keys;
+					console.log("inlineYahooKeyStatistics="+ret);
+					//alert(ret);
+					alert('Run again to see resustus of inlineYahooKeyStatistics. Finished caching cache['+maParam+']');	
+
+    			}
+			);
+			
+			/*
+			XMLHttpRequest cannot load http://finance.yahoo.com/q/ks?s=SBUX+Key+Statistics&_=1394843250027. 
+			Origin http://localhost:8088 is not allowed by Access-Control-Allow-Origin.
+			*/
+			/*
+			alert('inlineYahoo('+maUrl+')');
+			$.ajax({ url: maUrl, cache: false }).done(function( html ) {
+				ret="";
+				for (var i in keys) {
+					//if (html.indexOf(keys[i])>0){
+					ret+= "<i>"+keys[i]+"-"+html.indexOf(keys[i])+"</i>,";
+					//}else
+							
+				}
+				console.log("inlineYahoo="+ret);
+				alert('Finished inlineYahoo');		  				
+			});
+			*/
+			//alert('Finished inlineYahoo('+maUrl+')');
+			return ret;
+		}
+
+		// called by showtask:  inlineIVolatility("http://ivolatility.com/options", task.name+"NYSE")
+		var inlineIVolatility = function(maUrl, maParam){
+			var ret="Refresh-ShowMore";
+			if (cache["inlineIVolatility"+maParam]) {
+				console.log(cache["inlineIVolatility"+maParam]=cache["inlineIVolatility"+maParam]);
+				return cache["inlineIVolatility"+maParam];
+			}	
+						
+			inlineIVolatilityForMarket(maUrl, maParam, "NYSE");
+			inlineIVolatilityForMarket(maUrl, maParam, "NASDAQ");
+
+			return ret;
+		}
+
+		var inlineIVolatilityForMarket = function(maUrl, maParam, market){
+			$.get(
+    			maUrl+"/"+maParam+"/"+market,
+    			{},
+    			function( html ) {
+       				alert('inlineIVolatility('+maParam+'/N) http request: data.length=' + html.length);
+       				ret="";
+       				//"<table id=\"dt1\""  
+       				var tab2Beg = 5; //<table
+       				var tab2End = 5; //</table
+       				 "<table";
+
+       				var cntBefore=0;
+       				var cntAfter=0;
+       				while ( cntAfter<tab2End ){
+       					if (html.indexOf("<table")==-1 || html.indexOf("</table")==-1){ 
+       						if (confirm("URL="+maUrl+"/"+maParam+"/NYSE has no data. Show HTML?")){
+       							alert(html);
+       						} 
+       						cntAfter=tab2End;
+
+       					}        					
+       					if (cntBefore<5){
+       						cntBefore++;
+       						if (cntBefore==5) html=html.substring(html.indexOf("<table")+5);
+       						else html=html.substring(html.indexOf("<table")+5);
+
+       					} else if (cntAfter<5){
+       						cntAfter++;
+       						if (cntAfter==5) html=html.substring(0, html.indexOf("</table")+8);
+       					} 
+
+       				} 
+       				if (cntBefore==5){
+       					if (cache["inlineIVolatility"+maParam]){
+       						alert("Error caching inlineIVolatility"+maParam+"/NYSE, cache exists size="+cache["inlineIVolatility"+maParam].length);
+       					} else{
+							cache["inlineIVolatility"+maParam]=html;
+							console.log("inlineIVolatility="+html);
+							//alert(ret);
+							alert('Run again to see results ('+temp.length+' out of '+html.length+') of inlineFutures cached in '+maParam);	
+						}
+					} else { 
+						ret="ERROR inlineFutures: could not find <table id=\"dt1\"";
+						console.log("ERROR inlineFutures, html="+html);
+					}
+
+    			}
+			);
+			alert("FINISHED inlineIVolatilityForMarket("+maUrl+", "+maParam+", "+market+")");
+		}
+		// called by showtask:  inlineFutures("http://www.barchart.com/commodityfutures", task.name)------------------------------
+
+		var inlineFutures = function(maUrl, maParam){ 
+			var ret="Refresh-ShowMore";
+			var maParamPrefix;
+			var myFutMon = ["Y00","U14", "V14", "Z14", "F15"]; //, "G15", "J15", "K15", "M15", "N15"];
+			if (cache["inlineFutures"+maParam]) {
+				//console.log(cache["inlineFutures"+maParam]=cache["inlineFutures"+maParam]);				
+				ret+=cache["inlineFutures"+maParam];
+				maParamPrefix=maParam.substring(maParam.indexOf("/")+1);
+				for (var i = 0; i < myFutMon.length; i++) {
+					ret+="<h3> Opinion on "+maParamPrefix+myFutMon[i]+"</h3>"+cache["inlineFutures/opinions/futures/"+maParamPrefix+myFutMon[i]];			
+				}
+			}	
+			
+
+			$.get(
+    			maUrl+"/"+maParam,
+    			{},
+    			function( html ) {
+       				alert('inlineFutures('+maParam+') http request: data.length=' + html.length);
+       				ret="";
+       				//"<table id=\"dt1\""  
+       				var dt1 = "<table class=\"datatable js\" id=\"dt1\"";
+       				var indx=html.indexOf(dt1);
+       				if (indx>0){
+	       				var temp = html.substring(indx);
+						console.log("inlineFutures="+temp.length);
+						temp = temp.substring(0,temp.indexOf("</table>")+8);
+						while(temp.indexOf("href=\"/quotes/futures")>-1){ 
+							//alert("replacing "+temp.indexOf("href=\"/quotes/futures") );  
+							temp=temp.replace("href=\"/quotes/futures", "href=\"http://www.barchart.com/quotes/futures");
+
+						}
+
+
+						//<a href="/charts/futures/ZKM17" title="Chart for ZKM17"><img src="/shared/images/chart_icon.gif" width="12" height="10" border="0" /></a>&nbsp;
+						if (confirm("Drill through 1st and 2d /charts/futures")){
+
+
+							alert("Not Implemented: Drill through "+maUrl+"/charts/futures/"+maParam);
+						}
+						var maDrillUrl = maUrl.replace("/commodityfutures","");
+    					if (confirm("Drill through 1st and 2d "+maDrillUrl+"/opinions/futures/"+maParam+" ?")){
+    						//<a href="/opinions/futures/ZKM17" title=
+    						
+    						var missOp1="In order to properly form an accurate opinion";
+    						var missOp2="6 months of trading activity";
+    						
+    						//*** Gasoline_RBOB_Futures/RB
+    						//inlineFutures("http://www.barchart.com/commodityfutures", task.name)
+    						// Price Alerts: 
+							//Configurable News Feed: 
+
+							var tempSubhtml="";
+							//Gasoline_RBOB_Futures/RB
+
+							for (var i = 0; i < myFutMon.length; i++) {
+								if (confirm("Call "+maDrillUrl+"/opinions/futures/"+maParamPrefix+myFutMon[i])+" ?"){
+		    						$.get(
+		    							maDrillUrl+"/opinions/futures/"+maParamPrefix+myFutMon[i], {}, function( subhtml ) {
+		    								if (subhtml.indexOf(missOp1)>-1 && subhtml.indexOf(missOp2)>-1){
+		    									if (confirm("In order to properly form an accurate opinion for "+maParam+myFutMon[i]+" - 6 months of trading activity. Show source?")){
+		    										alert(maDrillUrl+"/opinions/futures/"+maParamPrefix+myFutMon[i]+"\n\n"+subhtml);
+		    									}
+		    								}
+		    								else{
+		    									if (confirm("FOUND OPINION ON "+maUrl+"/opinions/futures/"+maParamPrefix+myFutMon[i]+". Show source?")){
+		    										tempSubhtml=subhtml.substring(subhtml.indexOf("Detailed Opinion"));
+		    										tempSubhtml=tempSubhtml.substring(tempSubhtml.indexOf("<table "));	
+		    										tempSubhtml=tempSubhtml.substring(0, tempSubhtml.indexOf("for information on the studies.</td></tr></table>")+51);		
+		    										
+		    										if ( confirm("Cache inlineFutures/opinions/futures/"+maParam+myFutMon[i]+" ? Length="+tempSubhtml.length) ) {
+						    							cache["inlineFutures/opinions/futures/"+maParamPrefix+myFutMon[i]]=tempSubhtml;
+						    							 alert("OPINION ON "+maParamPrefix+myFutMon[i]+":\n"+tempSubhtml);
+						    						}
+		    										
+		    										
+		    									}
+
+		    								}
+		    							
+			    							
+			    						}
+		    						);
+								}
+	    						
+    						}
+
+    					}
+    					//http://www.ivolatility.com/options/DE/NYSE http://www.ivolatility.com/options/AMZN/NASDAQ/
+
+ 
+
+						//else{ alert("Nothing to replace");}
+						//str.replace("Microsoft", "W3Schools"); file:///quotes/futures/SDX14
+						if (confirm("Show inlineFutures"+maParam+" being put into cache?")){ 
+							alert(temp);
+						}
+						cache["inlineFutures"+maParam]=temp;
+						console.log("inlineFutures="+temp);
+						//alert(ret);
+						alert('Run again to see results ('+temp.length+' out of '+html.length+') of inlineFutures cached in '+maParam);	
+					}
+					else { 
+						ret="ERROR inlineFutures: could not find <table id=\"dt1\"";
+						console.log("ERROR inlineFutures, html="+html);
+					}
+
+    			}
+			);
+			return ret;
+
+		}	
+
+		//------------------------------------
+
+		//*** taskList, 'Mongo',myTable, query	
+		/* This code builds a new task row and adds it to the list */
+		//calledBy loadMongoTasks(q, tn, srlz)
+		var showTask = function(task, list, datasource, tn, query) {
+			console.log("showTask: "+task.name+", list="+list+", datasource="+datasource+", tn="+tn+", query="+query);
+			var table_name=tn || document.forms.search.table_name.value;
+			//TRACE
+			var show_oid = document.forms.search.show_oid;
+			gverbose  = document.forms.search.verbose;
+			
+			var depthAll = document.forms.search.depthAll.checked;
+			var checked_only = document.forms.search.checked_only.checked;
+			if (checked_only && !cache.tasksChecked[task.name]) return;
+
+			var drill_links = document.forms.search.drill_links.checked;
+			var show_pics = document.forms.search.show_pics.checked;
+			var show_desc = document.forms.search.show_desc.checked;
+			var ajax_links= document.forms.search.ajax_links.checked;
+
+			var yahooAll 		= document.forms.search.yahooAll.checked;
+			var historicalPrices = document.forms.search.HistoricalPrices.checked;
+			var keyStatistics	= document.forms.search.KeyStatistics.checked;
+			var competitors= document.forms.search.Competitors.checked;
+			var estimates= document.forms.search.Estimates.checked;
+			var insiderTransactions= document.forms.search.InsiderTransactions.checked;
+			var headlines= document.forms.search.Headlines.checked;
+		 	var industry= document.forms.search.Industry.checked;
+			var cashFlow= document.forms.search.CashFlow.checked;
+			var cashFlowAnnual= document.forms.search.CashFlowAnnual.checked;
+			var earningsCalendar= document.forms.search.EarningsCalendar.checked;
+			
+			//task: results.rows.item(i)
+			var newItem = document.getElementById(task.name);
+			if (!newItem) { 
+				newItem=document.createElement('li');
+				newItem.id=task.name;
+
+			}
+
+			checked = (task.complete == 1) ? ' checked="checked"' : '';
+			
+			newItem.innerHTML = 
+				'<div class="item_complete">'+
+					'<input type="checkbox" name="item_complete" id="chk_'+task.id+'" '+checked+'/>'+
+				'</div>'+
+				'<div class="item_name"><b>'+task.name+'</b>, <i>'+table_name+'</i>';
+				
+				if (depthAll && task.desc) {
+					newItem.innerHTML+='<br/><small>'+task.desc+'</small><br/><br/>';
+					var yahoo = task.desc;
+					var yahooParsed='<br/>';
+           			var tokens =yahoo.match(/\s+\w*:/g);
+           			if (tokens && tokens.length>0){
+	           			var prevToken;
+			           for (var y=0; y<tokens.length; y++){
+			              if (prevToken){
+			                  yahooParsed+='<b>'+yahoo.substring(yahoo.indexOf(prevToken), (yahoo.indexOf(prevToken)+prevToken.length))+'</b>'
+			                  +yahoo.substring((yahoo.indexOf(prevToken)+prevToken.length), yahoo.indexOf(tokens[y]))+'<br/>';
+			                  console.log('prevToken='+prevToken+', token['+y+']='+tokens[y]);
+			              }else{
+			              	  yahooParsed+=yahoo.substring(0, yahoo.indexOf(tokens[y]))+'<br/><br/>';
+			              }
+						  prevToken=tokens[y];
+			           }
+			           yahooParsed+='<b>'+yahoo.substring(yahoo.indexOf(prevToken), (yahoo.indexOf(prevToken)+prevToken.length))+'</b>'
+			           +'</b>'+yahoo.substring(yahoo.indexOf(prevToken)+prevToken.length)+'<br/>';
+
+			           yahooParsed+=yahoo.substring(yahoo.indexOf(prevToken));
+			           console.log(yahooParsed);
+			           newItem.innerHTML +=yahooParsed+'<br/>';
+			       	}else{
+						newItem.innerHTML +=task.desc+'<br/>';
+				   	}
+					
+				}else if (show_desc && task.desc) {
+					newItem.innerHTML+='<br/><small>'+task.desc+'</small><br/><br/>';
+				}
+
+				newItem.innerHTML +=' </div>';
+				newItem.innerHTML +='<div class="item_delete"><a href="#edit" id="edit_'+task.id+'">Edit</a></div>';
+				newItem.innerHTML +='<div class="item_delete"><a href="#" id="del_'+task.id+'">Delete</a></div>';
+				newItem.innerHTML +='<div class="item_delete"><a href="#" id="show_'+task.id+'">ShowMore</a></div>';
+				
+
+				if (datasource=='Mongo') {
+
+					newItem.innerHTML +='<div class="item_delete"><a href="#" id="ins_local_'+task.id+'">InsertLocal</a>';
+					
+					if ((depthAll || drill_links) && query) newItem.innerHTML +=mongoLinkedTo('',task,'verbose','select');
+					else newItem.innerHTML +=mongoLinkedTo('linkedTo: ', task);
+						
+					if (depthAll || show_pics){
+						if (gverbose) { if (!confirm("Continue VERBOSE? showTask calling imageExists("+task.name+"/imageN(1-9).png")) gverbose="" ;}
+						var pics='';
+						loopPic:
+						for (var g=1; g<10; g++){
+							if (imageExists(task.name+"/image"+g+".png")){
+								pics+='<img src="'+task.name+'/image'+g+'.png" id="'+task.name+'_image'+g+'" onmouseover="animate(this.style, 5.9)" onmouseout="animate(this.style, 0.8)" onclick="animate(this.style, 8.2)" />';
+							}else{
+								if (gverbose) { if (!confirm("Continue VERBOSE?\nimg src="+task.name+"/image"+g+".png does not exist")) gverbose="" ;}
+								console.log("showTask: img src="+task.name+"/image"+g+".png does not exist");
+								break loopPic;
+							}
+						}
+						//<div>position 'imageGalery' in the middle.
+						newItem.innerHTML += "<span style='position:absolute; left:20%;'>"+pics+"</span>";
+					} 
+					
+				}else{ // not mongo
+					newItem.innerHTML +='<div class="item_delete"><a href="#" id="ins_mongo_'+task.id+'">InsertMongo</a></div>'+
+					'<div class="item_desc">desc: '+task.desc+'</div>'+
+					'<div class="item_desc">linked: '+task.linked+'</div>';
+				}
+
+				if (query || cache.tasksChecked[task.name]){
+					var yahoo ='';
+					if (table_name=='marketevent'){
+						if (confirm("LOAD task="+task.name+"?")){
+							if (yahooAll ||	keyStatistics){ 
+								if (ajax_links && query){ yahoo+='<br/><b>'+task.name+' :</b><small>'+inlineFutures("http://www.barchart.com/commodityfutures", task.name)+'</small><br/>'; }						
+								else { yahoo+='<a href="http://www.barchart.com/commodityfutures/'+task.name+'>KeyStatistics</a>, ';}
+							}
+						}
+					}else if (table_name=='anlage'){
+						
+						if (yahooAll ||	historicalPrices){ 
+							if (ajax_links && query){ yahoo+='<br/><b>HistoricalPrices:</b> <small>'+inlineYahooHistoricalPrices("http://finance.yahoo.com/q/hp", task.name, task.linked)+'</small><br/>'; }						
+							else { yahoo+='<a href="http://finance.yahoo.com/q/hp?s='+task.name+'">HistoricalPrices</a>, ';}
+						} 
+						if (yahooAll ||	keyStatistics){ 
+							if (ajax_links && query){ 
+								yahoo+='<br/><b>Key+Statistics:</b> <del><small>'+inlineYahooKeyStatistics("http://finance.yahoo.com/q/ks", task.name+"+Key+Statistics")+'</small></del><br/>';
+								yahoo+='<br/><b>Volatility:</b> ivolatility.com/options/'+task.name+'/NYSE <del><small>'+inlineIVolatility("http://ivolatility.com/options", task.name+"/NYSE")+'</small></del><br/>';
+							
+							}						
+							else { yahoo+='<a href="http://finance.yahoo.com/q/ks?s='+task.name+'+Key+Statistics">KeyStatistics</a>, ';}
+						}
+						if (yahooAll ||	competitors){ 
+							if (ajax_links && query){ yahoo+='<br/><b>Competitors</b>: <del><small>'+inlineYahooCompetitors("http://finance.yahoo.com/q/co", task.name+"+Competitors")+'</small></del><br/>'; }						
+							else { yahoo+='<a href="http://finance.yahoo.com/q/co?s='+task.name+'+Competitors">Competitors</a>, ';}
+						}
+						if (yahooAll ||	estimates){
+							if (ajax_links && query){ yahoo+='<br/><b>AnalystEstimates</b>: <del><small>'+inlineYahooAnalystEstimates("http://finance.yahoo.com/q/ae", task.name+"+Analyst+Estimates")+'</small></del><br/>'; }						
+							else { yahoo+='<a href="http://finance.yahoo.com/q/ae?s='+task.name+'+Analyst+Estimates">AnalystEstimates</a>, ';}
+						}
+
+						if (yahooAll ||	insiderTransactions){
+								if (ajax_links && query){ yahoo+='<br/><b>InsiderTransaction</b>: <del><small>'+inlineYahooInsiderTransactions("http://finance.yahoo.com/q/it", task.name+"+Insider+Transactions")+'</small></del><br/>'; }						
+								else { yahoo+='<a href="http://finance.yahoo.com/q/it?s='+task.name+'+Insider+Transactions">InsiderTransactions</a>, ';}
+							}
+						if (yahooAll ||	headlines){
+								if (ajax_links && query){ yahoo+='<br/><b>Headlines</b>: <small>'+inlineYahooHeadlines("http://finance.yahoo.com/q/h", task.name+"+Headlines")+'</small><br/>'; }						
+								else { yahoo+='<a href="http://finance.yahoo.com/q/h?s='+task.name+'+Headlines">Headlines</a>, ';}
+							}
+				 		if (yahooAll ||	industry){
+								if (ajax_links && query){ yahoo+='<br/><b>Industry</b>: <del><small>'+inlineYahooIndustry("http://finance.yahoo.com/q/in", task.name+"+Industry")+'</small></del><br/>'; }						
+								else { yahoo+='<a href="http://finance.yahoo.com/q/ae?s='+task.name+'+Industry">Industry</a>, ';}
+						}
+						if (yahooAll ||	cashFlow){
+								if (ajax_links && query){ yahoo+='<br/><b>CashFlow</b>: <del><small>'+inlineYahooCashFlow("http://finance.yahoo.com/q/cf", task.name+"+Cash+Flow")+'</small></del><br/>'; }						
+								else { yahoo+='<a href="http://finance.yahoo.com/q/cf?s='+task.name+'+Cash+Flow">CashFlow</a>, ';}
+						}
+						if (yahooAll ||	cashFlowAnnual){
+								if (ajax_links){ yahoo+='<br/><b>CashFlowAnnual</b>: <del><small>'+inlineYahooCashFlow("http://finance.yahoo.com/q/cf", task.name+"+Cash+Flow&annual")+'</small></del><br/>'; }						
+								else { yahoo+='<a href="http://finance.yahoo.com/q/cf?s='+task.name+'+Cash+Flow&annual">CashFlowAnnual</a>, ';}
+						}					
+
+						if (yahooAll ||	earningsCalendar ){ 
+								if (ajax_links && query){ yahoo+='<br/><b>earningsCalendar</b>: <del><small>'+inlineYahooEarningsCalendar("http://www.nasdaq.com/earnings/earnings-calendar.aspx")+'</small></del><br/>'; }						
+								else { yahoo+='<a href="http://www.nasdaq.com/earnings/earnings-calendar.aspx" target="new">earningsCalendar</a>, ';  }
+						}
+							
+						
+					}
+					newItem.innerHTML +=yahoo;
+
+				}
+				newItem.innerHTML +='<select name="t2m2_'+task.id+'" id="move_'+task.id+'"><option>select...</option>'+
+					'<optgroup label="YAHOO">'+
+					'<option value="hp?s='+task.name+'+Historical+Prices">HistoricalPrices</option>'+
+					'<option value="ks?s='+task.name+'+Key+Statistics">KeyStatistics</option>'+
+					'<option value="co?s='+task.name+'+Competitors">Competitors</option>'+
+					'<option value="ae?s='+task.name+'+Analyst+Estimates">AnalystEstimates</option>'+
+					'<option value="bs?s='+task.name+'+Balance+Sheet&annual">BalanceSheet</option>'+
+					'<option value="cf?s='+task.name+'+Cash+Flow&annual">CashFlow</option>'+
+					'</optgroup>'+
+					'<optgroup label="EVENTS"><option>earnings-calendar</option></optgroup>'+
+					'<optgroup label="CRUD"><option>edit</option><option>clone</option></optgroup>'+
+  					'<optgroup label="move2"><option>strategies</option><option>anlage</option><option>marketevent</option><option>trilemma</option><option>rule</option><option>tasks</option></optgroup>'+
+					'</select></div>';
+				
+			list.appendChild(newItem);
+	
+			/* Executed when a user checks or unchecks the complete checkbox for a task */
+			var markAsComplete = function(e) {
+				e.preventDefault();
+				if (!cache.tasksChecked) {
+					cache.tasksChecked={};
+					alert('created empty cache.tasksChecked');
+				}
+				if (e.target.checked) {
+					cache.tasksChecked[task.name] = task; 
+					alert('cache.tasksChecked ' + cache.tasksChecked[task.name].name);
+				}else{ 
+					delete cache.tasksChecked[task.name];
+					alert('cache.tasksChecked['+[task.name]+']=' + cache.tasksChecked[task.name]);
+				}
+
+				var updatedTask = {
+					id: task.id,
+					desc: task.desc,
+					descUpper: "UPDATED",
+					name: task.name,
+					linked: task.linked,
+					complete: e.target.checked
+				};
+				updateTask(updatedTask);
+			}
+
+			//LISTENERS - Executed when the user clicks the Delete button for a task
+			var remove = function(e) {
+				e.preventDefault();
+				if(confirm('The task '+task.name+' id='+task.id+' will be deleted from '+datasource+'.'+table_name+'. Are you sure?', 'Confirm delete')) {
+					deleteTask(task, datasource, table_name);
+				}
+			}
+			var impo = function(e) {
+				e.preventDefault();
+				importLocal(task);				
+			}
+			var expo = function(e) {
+				e.preventDefault();
+				//exportMongo(task, 'strategies');
+				exportMongo(task);				
+			}
+			var showMore = function(e) {
+				e.preventDefault();
+				if (!tn) tn = task.table;
+				if (confirm("Show more of "+task.name+"?\ndatasource="+datasource+", table name="+tn)){						
+					showTask(task, list, datasource, tn, task.name);
+				}
+
+			}	
+			var move2 = function(e) {
+				e.preventDefault();
+				var newTable = document.getElementById('move_'+task.id).value;
+				if (newTable == 'edit'){
+					if (confirm("Edit "+task.name+" from "+table_name+"?")){
+						edit(task);
+					}
+				} else if (newTable=='clone'){
+					if (confirm("Clone "+task.name+" from "+table_name+"?")){
+						alert ('function clone(task) is under construction');
+					}
+				}
+				else if (newTable.indexOf('?s=')>0){
+					if (confirm('window.open("http://finance.yahoo.com/q/'+newTable+'")')){
+						window.open("http://finance.yahoo.com/q/"+newTable);
+					}
+				}else if(newTable=='earnings-calendar'){
+					var edate = new Date();
+					var eday, emonth, eyear;
+					var httpCalls='';
+					for (var i=0; i<30; i++){
+						eday=edate.getDate();	//Returns the day of the month (from 1-31)
+						if (edate.getDay()==5) eday+=2;	//Returns the day of the week (from 0-6)
+						else if (edate.getDay()==6) eday++;
+						emonth = edate.getMonth();	//Returns the month (from 0-11)
+						if (eday>31) {
+							emonth++;
+							eday-=31;
+						}
+						eyear = edate.getFullYear(); //Returns the year (four digits)
+						if (emonth>11){
+							eyear++;
+							emonth=-12;
+						}
+						httpCalls+=eyear+'-'+emonth+'-'+eday+'\n';
+
+					}	
+
+							
+					alert('Competitors and linked symbols days ahead for '+newTable+' http://www.nasdaq.com/earnings/earnings-calendar.aspx?date= '+httpCalls);
+
+				}else {
+					exportMongo(task, newTable);
+					if (confirm("To complete move2, delete "+task.name+" from "+table_name)){
+						deleteTask(task, datasource, table_name);
+					}
+				}
+				
+			}
+			var edit = function(e){
+				e.preventDefault();
+				var tgtDesc = 'target: ';
+				for (var i in e.target) {
+    				if (e.target.hasOwnProperty(i)) {
+        				tgtDesc += "\n\t" + i + " = " + e.target[i];
+    				}
+  				}
+  				console.log(tgtDesc);
+				var confMsg='Call editTask('+task.name+','+datasource+', '+tn
+				+');\nHTMLSelectElement? '+e.target.type+', value='+e.target.value
+				+', e.srcElement='+e.srcElement+', target.nodeType='+e.target.nodeType
+				+', e.target.parentNode='+e.target.parentNode;
+				
+				if (confirm(confMsg)){
+					if (e.target.type=='select-one'){
+					
+						document.forms.search.query.value=e.target.value;
+						for (var j=0;j<tables.length;j++){	
+							eval("document.forms.search."+tables[j]+".checked=1");			
+						}
+						searchTasks(e);
+			      	}else{
+						document.body.className = 'edit';
+						editTask(task,datasource, tn);
+					}
+				}
+			}
+	
+			/* Attach event handlers to the new task list item */
+			document.getElementById('chk_'+task.id).onchange = markAsComplete;
+			document.getElementById('move_'+task.id).onchange = move2;
+			document.getElementById('show_'+task.id).onclick = showMore;			
+			document.getElementById('edit_'+task.id).onclick = edit;			
+			document.getElementById('del_'+task.id).onclick = remove;
+			if (drill_links && cache.drilledLinks && cache.drilledLinks.length>0){
+				console.log('showTask cache.drilledLinks.length='+cache.drilledLinks.length);
+				for (var i=0; i<cache.drilledLinks.length; i++ ){
+					document.getElementById('edit_'+cache.drilledLinks[i]).onchange = edit;	
+
+				}
+			
+				cache.drilledLinks="";
+			}
+			if (datasource) {  
+				if (document.getElementById('ins_local_'+task.id)) {
+					document.getElementById('ins_local_'+task.id).onclick = impo; 
+				} else { alert('ERROR: Element id does not exist: ins_local_'+task.id+"\nDatasource="+datasource); }
+			}
+			else{ 
+				if (document.getElementById('ins_mongo_'+task.id)){
+					document.getElementById('ins_mongo_'+task.id).onclick = expo; 
+				} else { alert('ERROR: Element id does not exist: ins_mongo_'+task.id); }
+			}
+		}//END showTask
+
+
+
+//mongoLinkedTo-------------------------	
+		//<input type="submit" id="SearchNSave" value="Search and Save">
+		/*
+		var edit = function(task, datasource, tn){
+			alert ('Apply callback: U called Tasks.edit task='+task);
+		}
+		*/
+
+
+		var editTask = function(task, datasource, tn){
+
+				//*** LISTENER FAILURE :(
+				var editLinked = function(e){ 
+					e.preventDefault();
+					alert ('editLinked is under construction: Apply callback?\nU called Tasks.edit which has name encoded in edit_"+cache.drilledLinks[i]"\ne='+e);
+				}
+
+				alert('editTask');
+			    var msgLabel = $('label[name=msgLabel]');
+				var tickerLabel = $('label[name=tickerLabel]');
+				var descLabel 	= $('label[name=descLabel]');
+				var linktoLabel = $('label[name=linktoLabel]');
+				var drilledLabel = $('label[name=drilledLabel]');
+				
+				$('select[name=db_name]').val(datasource);
+
+				/*
+				if (confirm('Append input-text and textarea to msgLabel')){
+					msgLabel.text('msgLabel.text oid='+task.id);
+					$('<textarea name="oidTextAreaAppendTo" placeholder="appendTo: '+task.id+'"></textarea>').appendTo(msgLabel);
+					$('<input type="text" name="oidInputAppendTo" placeholder="appendTo: '+task.id+'/>').appendTo(msgLabel);
+				}*/
+			
+				//labelTicker.append(' status='+task.status);
+				var editOid 	= $('input[name=editOid]'); 
+				var editName 	= $('input[name=editName]'); 
+				var editDesc 	= $('textarea[name=editDesc]');
+				var editLinked 	= $('textarea[name=editLinked]');
+				var editDrilled = $('textarea[name=editDrilled]');
+				var editAppended = $('textarea[name="appended"]');
+				var editForm 	= $('form[name=edit]');
+				
+				editOid.val(task.id);
+				editDesc.val(task.desc);
+				editLinked.val(mongoLinkedTo('',task));
+				//editDrilled.val(mongoLinkedTo('',task,'verbose','drill'));
+
+
+				//*** 'drill' has eventListener issues
+				var drillType= 'select';
+				var drilledLinked2 = mongoLinkedTo('',task,'verbose','select'); 
+				if (drilledLinked2) {
+					alert('setting msgLabel.html('+drilledLinked2+')');
+					msgLabel.html(drilledLinked2);
+				}
+				editName.val(task.name);
+
+				if (task.desc) editDesc.val(task.desc);
+				//if (!editAppended) editForm.append('<label>Appended For Your Notes<textarea name="appended"></textarea></label>');	
+					
+
+				//}
+				/*
+				if (datasource=='Mongo' && confirm('load msgLabel.before and after')) {
+						//editName.after('<textarea name="oid" placeholder="editName.after: '+task.id+'"></textarea>');
+						msgLabel.before('msgLabelName.before : textarea: <textarea name="oidTextAreaAfter" placeholder="'+task.id+'"></textarea>');
+						msgLabel.before('masgLabelName.before : input-text: <input type="text" name="oidInputBefore" placeholder="'+task.id+'/>');
+
+						msgLabel.after('msgLabelName.after : textarea: <textarea name="oidTextAreaBefore" placeholder="'+task.id+'"></textarea>');
+						msgLabel.after('msgLabelName.after : input-text: <input type="text" name="oidInputAfter" placeholder="'+task.id+'/>');
+				}
+				*/
+				var oid = document.forms.edit.editOid.value || '';
+				document.getElementById('action').onchange = insertTask;
+				alert('editTask finished: oid='+oid, 'editTask');
+
+
+				if (cache.drilledLinks){
+
+						for (var i=0; i<cache.drilledLinks.length; i++ ){
+							console.log('setting lintener on edit_'+cache.drilledLinks[i]);
+							if (document.getElementById('edit_'+cache.drilledLinks[i])){
+								if (drillType=='select') document.getElementById('edit_'+cache.drilledLinks[i]).onchange = function(e){ alert('Dummy Listener'); };
+								else document.getElementById('edit_'+cache.drilledLinks[i]).onclick = editLinked;
+							}else{
+								alert('editTask: error: id not found: edit_'+cache.drilledLinks[i]);
+							}
+
+						}
+					
+				}
+				cache.drilledLinks='';
+		}//end editTask
+		/* Listen to the submit event of the edit form */
+		document.forms.edit.addEventListener('submit', insertTask, false);
+
+		/* called by 
+		showTask: newItem.innerHTML +=mongoLinkedTo('linkedTo: ', task);
+		editTask: mongoLinkedTo('',task,'verbose','drill[select]') ..
+		*/
+		var mongoLinkedTo = function(prefix,maMongo,verbose,drillLinks){
+			var confirmAll=document.forms.search.confirm_all.checked || document.forms.search.depthAll.checked;
+			var confirmedByDefault = localStorage.getItem('confirmedByDefault') ||'';
+			//var edit = function(e){ editTask(maMongo,datasource, tn); }
+
+			if(!drillLinks && document.forms.search.drill_links.checked) drillLinks='drill';
+			var ret=prefix;
+			var ticker;
+			var aTask;
+			var tabs = ['strategies','anlage','marketevent','trilemma','rule','tasks'];
+
+			if (drillLinks) {	 
+				//if (!mem.strategies || !mem.anlage) preloadMongo(); 
+				alert('mongoLinkedTo - preloadMongo() disabled');
+			}
+			var drilledLinks = []; //drilledLinks.push("Hola");
+			if (maMongo.items){
+				var j=0;
+				var dlSelect;
+				for(;j<maMongo.items.length;j++) {
+					
+					if (drillLinks) {
+						var dret="";															
+						// Loop through all tables (i.e. Strategy, Anlage, etc)
+						for (propName in mem){
+							//mongoLinkedTo_drillLinks
+							//localStorage.getItem('confirmedByDefault'),
+							//if (confirmedByDefault.indexOf("mongoLinkedTo_drillLinks") || 
+							if (confirmAll || confirmedByDefault.indexOf("mongoLinkedTo_drillLinks")>-1 || confirm('mongoLinkedTo drillLinks='+drillLinks+':\n confirmedByDefault='+confirmedByDefault
+									+'\nindexOf("mongoLinkedTo_drillLinks")='+confirmedByDefault.indexOf("mongoLinkedTo_drillLinks") 
+									+'\n'+maMongo.items[j].ticker+" link2 "+mem[propName].length+" "+propName+"?")){
+								for (var m=0; m<mem[propName].length; m++){
+									aTask=mem[propName][m];
+									if(aTask.name){
+										console.log('Comparing '+maMongo.name+' -> '+maMongo.items[j].ticker)+' = '+propName+"."+aTask.name;
+
+										if (aTask.name.trim() == maMongo.items[j].ticker.trim()){
+										//FOUND MATCH
+											if (aTask.items && confirm('mongoLinkedTo retrieve '+aTask.items.length+' links of '+aTask.name+'?\ndrillLinks='+drillLinks+' : '+(drillLinks=='select'))){
+												
+												if (drillLinks=='select'){ 
+													console.log("mongoLinkedToNew Task "+aTask.name+" id="+aTask.id+"\n Last html="+dlSelect);
+
+													dlSelect='<select name="edit_'+aTask.name+'" id="edit_'+aTask.name+'"><option>'+aTask.name+'</option>';					
+
+												}
+												if (aTask.items.length){
+													for (var n=0; n<aTask.items.length; n++){
+														//dret+=aTask.items[n].ticker+", ";
+														//document.getElementById('edit_'+task.id).onclick = edit;
+														
+														if (drillLinks=='select'){
+															dlSelect+='<option>'+aTask.items[n].ticker.trim()+'</option>';
+	
+														}else{
+															drilledLinks.push(aTask.items[n].ticker.trim());
+															dret+='<a href="#edit" id="edit_'+aTask.items[n].ticker+'">'+aTask.items[n].ticker+'</a>, ';
+														}	
+													}
+												}
+												if (drillLinks=='select'){ 
+													dret+=dlSelect+'</select>'; 
+													drilledLinks.push(aTask.name);
+												}
+											}
+
+										}
+									}									
+								}
+
+							}
+						}
+
+						if (dret.length>2){
+							if (drillLinks=='select') ret+=dret;
+							else ret+=maMongo.items[j].ticker+"("+dret+")<br/> ";													
+						}else{ 
+							ret+=maMongo.items[j].ticker+', ';	
+						}
+
+					}else{	
+						
+						if (verbose) { ret+=' ( '+JSON.stringify(maMongo.items[j])+' )</br> '; }
+						else{  ret+=maMongo.items[j].ticker+', '; }
+					}
+				}
+			}else{
+				ret='NoLinks';
+			}
+			/*
+			if (drillLinks=='select' && document.forms.search.drill_links.checked 
+				&& confirm('Clean cache.drilledLinks in showTask?\nlength='+cache.drilledLinks.length)){			
+			} else {
+				alert('mongoLinkedTo clean cache.drilledLinks.length='+cache.drilledLinks.length+' drillLinks='+drillLinks+', cecked='+document.forms.search.drill_links.checked);  				
+			}
+			if (drillLinks) alert( 'mongoLinkedTo finished, drilledLinks='+drilledLinks.length+', ret=\n'+ret);
+			*/
+			cache.drilledLinks=drilledLinks;
+			return ret; 
+
+		}//END mongoLinkedTo
+
+		//linked-T--qTokens[k],html[i])
+		function searchObjectProperties(query, obj) {
+			var i;
+		   for(var propName in obj) {
+		      if(typeof(obj[propName]) != "undefined") {
+		      	if(obj[propName] instanceof Array){
+		      		//console.log('recursive call for '+obj[propName].length+' '+propName);
+		      		for (i=0;i<obj[propName].length;i++){		      			
+		      			if (searchObjectProperties(query, obj[propName][i])) return true;		      			
+		      		} 
+		      		
+		      	} else if ( typeof obj[propName] === 'string' ){ 
+		      		if (obj[propName].indexOf(query)>-1) {
+		      			if (query.length<3){
+		      				return obj[propName].length==query;
+		      			}else{
+			      		//if (confirm(query+' matches '+propName+'='+obj[propName])){
+			      			return true;
+			      		//}
+			      		}
+		         	}
+		         	//trc else{ console.log('query='+query+' has no match in '+propName+'='+obj[propName]);}
+		         
+
+		         }
+		      }		      
+		   }
+		   return '';
+		}
+		//Indefinite loop
+		function explainObject(obj, step, depth, verbose) {
+		   var ret="";
+		   var i = step || 0;
+		   var ds = depth || 1;
+		   var prefix='';
+
+		   for (var j=0; j<i; j++) prefix+='\t';
+		   if (obj){
+			   	if ( typeof obj === 'string' ) return obj;
+			   	else  if(obj instanceof Array){
+			   			for (var k=0; k<obj.length; k++){
+			   				//if (confirm("Continue? explainObject Step="+i+", recursive call obj["+k+"]")){ //+obj[k]
+			   					console.log("explainObject Step="+i+", recursive call from array obj["+k+"]="+obj[k]);
+			   					if (i<ds) ret+='\n\t'+prefix+' recursive call from array obj["+k+"]='+explainObject(obj[k], i++);
+			   					else ret+='\n\t'+prefix+'=obj['+k+']='+obj[k];
+			   				//}
+			   			}
+			   	} else {
+			   		for(var propName in obj) {
+			      		if(typeof(obj[propName]) != "undefined") {
+			      			//if (confirm("Continue? explainObject Step="+step+", recursive call obj["+propName+"]="+obj[propName])) {
+			      				if (i<ds) ret+="\n"+prefix+", recursive call from array obj["+propName+"]="+explainObject(obj[propName], i++);
+			      				else ret+='\n\t'+prefix+'=obj['+propName+']='+obj[propName];
+			      			//}
+			      		}
+			      		else ret+="\n"+prefix+propName;
+			      	}
+			   	}
+			} else ret += "obj=null, step="+i+", ";
+			if (!i) ret="explainObject: "+ret;
+		   	return ret; 
+		}
+
+//-----loadMongoTasks---------------------------------------------------		
+		
+		for (var x=0; x<tables.length; x++){
+			// *** Listener doesn't work
+			//document.getElementById('chk_'+tables[x]).onchange = appendMongoLoad;
+			document.getElementById('chk_'+tables[x]).addEventListener('onchange',appendMongoLoad,false);			
+			//alert (" added listener 2 "+tables[x]+" i.e. "+document.getElementById('chk_'+tables[x]));
+
+		}
+
+		var appendMongoLoad = function(e){
+			e.preventDefault();
+			alert('e.target = ');
+			//if (!e) var e = window.event;
+			//alert('e.target = '+e.target+', e.srcElement='+e.srcElement+', targ.nodeType='+targ.nodeType);
+			//if (targ.nodeType == 3) // defeat Safari bug
+			//targ = targ.parentNode;
+			//loadMongoTasks = function(q, tn, srlz){
+		}			
+		
+		//called searchTasks = function(e) 
+		var loadMongoTasks = function(q, tn, append){
+			var taskList = document.getElementById('list'),  query = q || '', myTable= tn|| 'tasks';
+			var confirmAll= document.forms.search.confirm_all.checked || document.forms.search.depthAll.checked;
+			if (!append) { taskList.innerHTML = ''; }
+			else {alert("loadMongoTasks: appending to existing taskList.length: "+taskList.length); }
+			
+			for(var t in cache.tasksChecked){ 
+				var cTask=cache.tasksChecked[t];
+				showTask(cTask, taskList, cTask.table);
+			}
+			//if (query && !confirm('loadMongoTasks restrict to query='+query+'?')) return;
+			var qTokens, loadOrphans, cntValid=0, cntSelected=0, cntOrphans=0;
+			if (query){
+				if (query.indexOf(",")) { 
+					qTokens=query.split(",");
+				}else{qTokens[0]=query;}
+			}
+			if ( !document.forms.search.depthAll.checked && !document.forms.search.skip_orphans.checked) loadOrphans=true; 
+			var maUrl= "https://api.mongolab.com/api/1/databases/admire-app/collections/"+myTable+"?apiKey=fUzDy7tkDnwN39f-r9nki3FNM7Lo1Lup";
+			var result;
+			$.ajax({ url: maUrl, cache: false, async: false }).done(function( html ) {
+				console.log('ajaxResult='+html);
+				//----------------------------------
+				if (html) { 
+					var i = 0, j=0, k=0;
+					console.log('items='+html.length);
+					if (html.length){
+						for(;i<html.length;i++) {
+								var mongoTask= JSON.stringify(html[i]);
+								var maIds=mongoTask.match(/"\w*"\}/);								
+								if (maIds && maIds.length>0) {
+									//console.log("loadMongoTasks: Matched "+maIds.length+" Ids, maIds[0]= "+maIds[0]);
+									html[i].id=maIds[0].substring(1,maIds[0].length-2);
+								}else{
+									alert('Could not match id in '+mongoTask, 'loadMongoTasks');
+								}
+								if (query){
+									if ( html[i].name )  cntValid++;
+
+									loopTok:
+									for(;k<qTokens.length;k++) {
+										qTokens[k]=qTokens[k].trim();
+										//console.log("loadMongoTasks: Searching "+i+" out of "+html.length+" for "+qTokens[k]+" in "+html[i].name);
+
+										//-----------------linked-T--qTokens[k],html[i])---------------
+										if (html[i].name==qTokens[k] || searchObjectProperties(qTokens[k],html[i])) {
+											if (confirmAll || html[i].name!=qTokens[k] || confirm('loadMongoTasks: Load '+html[i].name+' linked2 '+qTokens[k]+'?\n'+"Confirm Defaults BOX - 2 suppress dialog.")){
+												showTask(html[i], taskList, 'Mongo',myTable, query);
+												cntSelected++;
+											}
+											break loopTok;
+										}
+										//else{ console.log('loadMongoTasks: NO MATCH for token '+qTokens[k]); }
+									}
+									k=0;
+
+								} else {
+									//***if (loadOrphans || html[i].name || !isTaskEmpty(html[i])){
+									if ( html[i].name ) {
+										cntValid++;
+										showTask(html[i], taskList, 'Mongo', myTable, 'query');
+									} else if (loadOrphans){
+										showTask(html[i], taskList, 'Mongo', myTable);
+										if (!cache[tn]){ 
+											var maIds = JSON.stringify(html[i]).match(/"\w*"\}/);								
+											if (maIds && maIds.length>0 && confirm("Cache orphan Id= "+maIds[0])) {
+												cache[tn]=maIds[0].substring(1,maIds[0].length-2);
+											}
+										}
+									}
+								}	 
+							
+						}// END for loop
+						if (!cntSelected && query){
+							var tTable=myTable;
+							var task = { name: query, table: tTable, id: query };
+							showTask(task, taskList, 'Mongo', myTable, 'query');
+						}
+						var trcLoadMongoTasks='loadMongoTasks: selected '+cntSelected+' out of '+ cntValid
+						+' valid within total of '+html.length+' tasks\n buffered for oid json=';
+						if (tn=='strategies' && !mem.strategies ) mem.strategies=html;
+					    else if (tn=='anlage' && !mem.anlage ) mem.anlage=html;
+
+						if (cache[tn]) trcLoadMongoTasks+=JSON.stringify(cache[tn]);
+
+						console.log(trcLoadMongoTasks);
+
+					} else { 
+						alert('Table '+tn+' has no records matching quiery='+q, loadMongoTasks);
+						//createEmptyItem(query, taskList); 
+
+					}
+				}else{
+					alert('NULL AJAX RESPONSE FOR\n'+maUrl, loadMongoTasks);
+				}	
+
+			});
+	    	//alert('AfterAjaxResult='+result);
+	    	document.body.className = 'list';	    	
+		} //END loadMongoTasks
+
+		var isTaskEmpty = function(task){
+			for (propName in task){
+				if (propName != '_id' && propName != 'id') return false; 
+			}
+			return true;
+		}
+
+		//displays Task List view
+		//CalledBy: insertTask deleteTask dropDatabase openDB
+		var loadTasks = function(q, tn, srlz) {
+			var taskList = document.getElementById('list'),  query = q || '', myTable= tn|| 'tasks';				
+			taskList.innerHTML = '';
+
+			console.log('loadTasks myTable='+myTable+', srlz='+srlz);
+	
+			if(indexedDB) {
+				/* IndexedDB uses cursors to read data from the database */
+				var tx = db.transaction([myTable], IDBTransaction.READ_ONLY),
+					objectStore = tx.objectStore(myTable),
+					cursor,
+					i = 0;
+			
+				/* If the user is searching, we use an index, otherwise just use the object store */
+				if(query.length > 0) {
+					var index = objectStore.index('desc'),
+						upperQuery = query.toUpperCase(),
+						keyRange = IDBKeyRange.bound(upperQuery, upperQuery+'z');
+				
+					cursor = index.openCursor(keyRange);
+				} else {
+					cursor = objectStore.openCursor();
+				}
+		
+				/* This callback function is executed for each item returned by the cursor */
+				cursor.onsuccess = function(e) {
+					var result = e.target.result;
+					if(result == null) return;
+					i++;
+					/* Call the showTask function to display the task item */
+					showTask(result.value, taskList);
+					if (srlz) jsonAll += jsonTask(result.value);
+					/* Continue to the next item in the cursor */
+					result['continue']();
+				}
+		
+				/* When the read transaction is complete, check if there are zero rows and create an empty item if so */
+				tx.oncomplete = function(e) {
+					if(i == 0) {
+						createEmptyItem(query, taskList);
+					}
+				}
+			} else if(webSQLSupport) { //supports fulltext searching
+				db.transaction(function(tx) {
+					var sql, args = [], sql = 'SELECT * FROM '+myTable;
+					if(query.length > 0) {
+						sql = 'SELECT * FROM '+myTable+' WHERE desc LIKE ?';
+						args[0] = query+'%';
+					} 
+			
+					/* This callback function will be iterate over the SQL result set and display the tasks */
+					var iterateRows = function(tx, results) {
+						var i = 0,
+							len = results.rows.length;
+						for(;i<len;i++) {
+							showTask(results.rows.item(i), taskList);
+							if (srlz) jsonAll += jsonTask(result.value);
+
+						}
+						if(len === 0) {
+							createEmptyItem(query, taskList);
+						}
+					}
+			
+					tx.executeSql(sql, args, iterateRows);
+				});
+			}
+			if (srlz) {
+				alert('loadTasks().serializeString(...) '+myTable+'\n'+jsonAll, loadTasks);				
+				serializeString(jsonAll);
+				srlz=false;
+			}
+		} //End loadTasks
+
+		//*** calledBy searchTasks
+		var preloadMongo=function(){
+			var maUrlPrefix= "https://api.mongolab.com/api/1/databases/admire-app/collections/";
+			var maUrlSuffix="?apiKey=fUzDy7tkDnwN39f-r9nki3FNM7Lo1Lup";
+			var trc="preloaded tasks: ";
+	
+				if (!mem.strategies){
+					maUrl=maUrlPrefix+"strategies"+maUrlSuffix;
+					$.ajax({ url: maUrl, cache: false }).done(function( html ) {
+						mem.strategies = html;
+						trc+="strategy="+html.length;	
+						alert('preloadMongo (calledBy mongoLinkedTo) loaded: mem.strategies '+mem.strategies.length);
+				
+					});
+
+				}
+				if (!mem.anlage){
+					maUrl=maUrlPrefix+"anlage"+maUrlSuffix;
+					$.ajax({ url: maUrl, cache: false }).done(function( html ) {
+						mem.anlage = html;
+						trc+=", anlage="+html.length;
+						alert('preloadMongo (calledBy mongoLinkedTo) loaded: mem.anlage='+mem.anlage.length);
+					
+					});
+			}				
+		}
+		
+		/* Search for a task by the entered search query */
+		var searchTasks = function(e) {
+			e.preventDefault();
+			if (document.forms.search.checked_only.checked && cache.tasksChecked){
+				if (confirm("searchTasks: Load "+Object.keys(cache.tasksChecked).length+" checked tasks only?")){
+					var taskList = document.getElementById('list');				
+					taskList.innerHTML = '';
+					for(var t in cache.tasksChecked){ 
+						if (confirm("searchTasks: Load "+t+"?")) showTask(cache.tasksChecked[t], taskList);
+					}
+					
+				}
+			}else{
+
+
+				var drill_links = document.forms.search.drill_links;
+				//var tabs = ['strategies','anlage','marketevent','tasks'];
+				//***if (drill_links.checked) preloadMongo();
+
+				var query = document.forms.search.query.value || '';
+				var tableName = document.forms.search.table_name.value || 'tasks';
+				var dbType = document.forms.search.db_name.value || 'local';
+				if (dbType == 'Mongo') {  
+					var checkedTables = []; //drilledLinks.push("Hola");
+					for (var j=0;j<tables.length;j++){	
+						if (document.forms.search.alltables.checked){
+							eval("checkedTables.push('"+tables[j]+"')");	
+						}else{
+							eval("if(document.forms.search."+tables[j]+".checked){ checkedTables.push('"+tables[j]+"');}");			
+						}
+					}
+
+					if (checkedTables.length>0){
+
+						
+						for (var i=0; i<checkedTables.length; i++){
+							if (confirm('searchTasks: loadMongoTasks(query='+query+', checkedTables[i]='+checkedTables[i]+')?')){
+								loadMongoTasks(query, checkedTables[i], 'append');
+							}
+						}	
+						
+					} else { 
+						loadMongoTasks(query, tableName);
+					}
+
+
+				} else { loadTasks(query, tableName); }
+			}
+		}
+		
+		/* Listen to the submit event of the search form */
+		document.forms.search.addEventListener('submit', searchTasks, false);
+
+
+//insertTask-------------------------------		
+		/* After a task has been inserted, reload tasks, display a message and return to the Task List view */
+		var insertTaskSuccess = function(tn) {
+			if (confirm('insertTaskSuccess() inserted to '+tn+'\nloadTasks(...'+tn+')','insertTaskSuccess')) loadTasks('',tn);
+			
+			document.forms.add.desc.value = '';
+			document.forms.add.name.value = '';
+			document.forms.add.linked.value = '';
+			location.hash = '#list';
+		}
+
+		var insertTaskFailure = function(tn) {
+			alert('insertTaskFailure()  could not insert into '+tn, 'insertTaskFailure');
+			//+ error.message + "; Code: " + error.code +'\n
+			return true;
+		}
+
+		/* Insert a new task into the database */
+		var insertTask = function(e) {
+			alert('insertTask');
+			e.preventDefault();
+
+			var oid,name, desc,linked,
+					tableName = document.forms.add.table_name.value || 'tasks',
+					dbName= document.forms.add.db_name.value || 'Local';
+
+			if (document.body.className == 'add') {
+					name = document.forms.add.name.value;
+					desc = document.forms.add.desc.value || '';
+					linked = document.forms.add.linked.value || '';
+			}else if (document.body.className == 'edit') {
+					oid = document.forms.edit.editOid.value;
+					name = document.forms.edit.editName.value;
+					desc = document.forms.edit.editDesc.value;
+					linked = document.forms.edit.editLinked.value;
+			} else{ alert('insertTask error: "edit" or "add" allowed, but document.body.className='+document.body.className);}
+
+			alert('insertTask '+dbName+':'+tableName+' calledBy form='+document.body.className);
+			/* Validate that a task description and due date have been entered */
+			if(name.length > 0 ) {
+				/* Build a task object to save */
+				
+				var task = {
+					oid: oid,
+					name: name,
+					desc: desc,
+					descUpper: desc.toUpperCase(),
+					linked: linked,
+					complete: false
+				}
+				if (dbName=='Local'){
+					if(indexedDB) {
+						var tx = db.transaction(['tasks'], IDBTransaction.READ_WRITE);
+						var objectStore = tx.objectStore('tasks');
+						/* The add method inserts a new record into the object store */
+						var request = objectStore.add(task);
+						request.onsuccess = insertTaskSuccess;
+					} else if(webSQLSupport) {
+						db.transaction(function(tx) {
+							var sql = 'INSERT INTO '+tableName+' (name, desc, linked, complete) '+ //, complete
+										'VALUES(?, ?, ?, ?)',
+								args = [task.name, task.desc, task.linked, task.complete];
+							tx.executeSql(sql, args, insertTaskSuccess(tableName));
+							var trc='task.name='+task.name+'\ntask.desc='+task.desc+'\ntask.linked='+task.linked+'\ntask.complete='+task.complete;
+							alert(trc, 'insertTask dbName='+dbName);
+						});
+					}
+				}
+				else if (dbName=='Mongo'){
+					if (confirm('insertTask->exportMongo:'+tableName+' oid='+oid+'\n'+task.name+'?', 'insertTask->exportMongo')){
+						
+						exportMongo(task, tableName);
+					}
+				}
+				else { alert('Invalid storage dbName='+dbName, 'insertTask'); }	
+			} else {
+				alert('Please fill out all fields', 'insertTask error');
+			}
+		}//END insertTask
+
+		/* Listen to the submit event of the Add Task form */
+		document.forms.add.addEventListener('submit', insertTask, false);
+		
+		/* Update a task (mark as complete/incomplete) */
+		var updateTask = function(task) {
+			if(indexedDB) {
+				/* Open an IndexedDB read/write transaction */
+				var tx = db.transaction(['tasks'], IDBTransaction.READ_WRITE);
+				var objectStore = tx.objectStore('tasks');
+				/* The put method will update an existing item if it exists */
+				var request = objectStore.put(task);
+			} else if(webSQLSupport) {
+				/* If a task is complete, use 1, otherwise use 0 */
+				var complete = (task.complete) ? 1 : 0;
+				db.transaction(function(tx) {
+					/* WebSQL uses bind variables to protect against SQL injection */
+					var sql = 'UPDATE tasks SET complete = ? WHERE id = ?',
+						args = [complete, task.id];
+					tx.executeSql(sql, args);
+				});
+			}
+
+		}	
+
+		/* CalledBy remove */
+		var deleteTask = function(task, datasource, tn) {
+			if (datasource == 'Mongo'){	
+				var lmtQ=task.name; //loadMongoTasksQuery
+				var maUrl= "https://api.mongolab.com/api/1/databases/admire-app/collections/";
+				maUrl+=tn;				
+				maUrl+="?apiKey=fUzDy7tkDnwN39f-r9nki3FNM7Lo1Lup";
+				var ins ='{ _id: { $oid: "';
+				if (task.id) ins+=task.id;
+				else { 
+					for (var propName in task._id) {
+						alert(typeof(obj[propName])+" "+propName);
+		      			ins = +obj[propName];
+		      		}
+				}	
+				ins+='"}}';  
+		  		if  (task.linked){
+					var res = maTask.linked.split(",");						
+					for (var i = res.length - 1; i >= 0; i--) {
+						lmtQ+=','+res[i];
+						 	
+					 } 
+			  	}
+			  	if (confirm(
+			  			'Delete '+task.name+' from '+datasource+'.'+tn+'? Press NO to show assoc. for query='+
+			  			lmtQ+'\n with JSON:\n'+ins, 'Confirm delete')) {
+				
+
+					$.ajax({
+								url: maUrl,
+								type: "POST",
+								data: ins,
+								contentType: "application/json"
+					}).done(function( msg ) {
+								if(msg.status == "error") alert('Error Ajax POST');
+	                			if(confirm('TASK '+task.name+' HAS BEEN DELETED.lmtQ='+lmtQ+'\nSHOW ASS. FOR '+tn+' ONLY?\nPress NO for choices.')) { 
+									loadMongoTasks(lmtQ, tn, srlz);
+								} 
+					});
+					
+					alert('Finished delete, loading query:\n'+lmtQ);
+				}else{
+					loadMongoTasks(lmtQ, tn, srlz);
+				}
+				
+			} else {
+				if(indexedDB) {
+					var tx = db.transaction(['tasks'], IDBTransaction.READ_WRITE);
+					var objectStore = tx.objectStore('tasks');
+					/* delete is a reserved word in JavaScript, so use alternate syntax to be safe */
+					/* To delete an item we pass the key as the argument */
+					var request = objectStore['delete'](task.id);
+					request.onsuccess = loadTasks;
+				} else if(webSQLSupport) {
+
+					db.transaction(function(tx) {
+						var sql = 'DELETE FROM '+tn+' WHERE id = ?',
+							args = [task.id];
+						tx.executeSql(sql, args, loadTasks('',tn) );
+					});
+				}
+			}
+		}
+//Mongo------------------------------------------------------------
+		//called by event listener impo 
+		var importLocal=function(maTask){
+			var tableName = document.forms.search.table_name.value;
+			if(confirm('importLocal:'+tableName+' task.id=+'+maTask.id+', task.name='+maTask.name+', task.desc='+maTask.desc+', task.linked='+maTask.linked)) {
+				alert('Started importLocal:');
+			}
+		}
+/*
+USD-Up-US_Bubble-In_LuxuryHousing_Art-Farmland_JunkBonds_FancyCars
+
+US deficits are shrinking + energy boom.
+Stock market performance, which has been driven primarily by QE.
+Europe has virtually no economic growth. 
+Consumer prices will remain depressed.
+Commodity prices will remain soft. 
+and the U.S. dollar could be stronger.
+Japan inflates US_Bubble
+
+TechnologicalLeadership, ProfitMargins, CapInvestmentShortage-RetiringWorkforce,CLF,GILD,ERJ,UPS,FDX,UNP
+
+
+*/		
+		var exportMongo=function(maTask, tn){
+			var tableName = tn || document.forms.search.table_name.value;
+			//if(confirm('exportMongo:'+tableName+' task{oid=+'+maTask.oid+', id=+'+maTask.id+', name='+maTask.name+', desc='+maTask.desc+', linked='+maTask.linked)) {			
+				var lmtQ=maTask.name; //loadMongoTasksQuery
+
+				var maUrl= "https://api.mongolab.com/api/1/databases/admire-app/collections/";
+				maUrl+=tableName; 
+				maUrl+="?apiKey=fUzDy7tkDnwN39f-r9nki3FNM7Lo1Lup";
+				var ins;
+				/* { _id: { $oid: "52c32b35e4b0c5bed3a83aaf" }} */
+				if (maTask._id) {
+					delete maTask.id;
+					ins=JSON.stringify(maTask);
+					
+				} else {
+
+			  		ins = '{_id: { $oid: "';
+			  		if (maTask.oid){ ins += maTask.oid+'" }, '; } //JSON={_id: { $oid: "[object Object]" }, "name" : "SAP" , "status" : "draft", "desc" : "" }
+			  		else if (cache[tn] && confirm('Reuse orphan $oid='+cache[tn])){
+			  			ins += cache[tn]+'" }, ';
+			  		}else{ ins='{'; }
+			  		ins+='"name" : "'+maTask.name+'" , "status" : "draft", "desc" : "'+maTask.desc+'" ';
+			  		if  (maTask.linked){
+			  			ins+=', "items" : [';
+						var res = maTask.linked.split(",");
+						console.log(maTask.name+' is linked to '+res.length+' items');
+						for (var i = res.length - 1; i >= 0; i--) {
+							lmtQ+=','+res[i];
+						 	ins+='{ "ticker" : "'+res[i]+'"}';
+						 	if (i>0) { ins+=", "; }
+						 };
+						 ins+=']'; 
+			  		} 
+			  		/*
+			  		else if (maTask) {
+			  			//////////////////////////////////////////////
+			  			newItem.innerHTML +=mongoLinkedTo('linkedTo: ', task);
+			  		
+
+
+			  			////////////////////////////////////////////
+			  		}*/
+			  		ins+="}";
+			  	}
+		  		if (confirm('JSON='+ins)){
+					$.ajax({
+								url: maUrl,
+								type: "POST",
+								data: ins,
+								contentType: "application/json"
+					}).done(function( msg ) {
+								if(msg.status == "error") alert('Error Ajax POST');
+	                			
+								if (confirm('export(ed)Mongo. Add '+maTask.name+' to current selection? Cancel for more options:')){
+									showTask(maTask,document.getElementById('list'));
+									document.body.className = 'list';		
+								} else if (confirm('Show all of '+tableName+'?\nIf NOT, quering with lmtQ='+lmtQ)){
+									loadMongoTasks('', tableName, srlz);
+
+								} else if(confirm('SHOW ASS. FOR '+tableName+' ONLY?\nPress NO for choices.')) { 
+									loadMongoTasks(lmtQ, tableName, srlz);
+
+								} else {
+									//document.forms.search.
+									for (var j=0; j<tables.length; j++){
+										if (confirm('Show ass. for '+tabs[j]+'?')){
+											loadMongoTasks(lmtQ, tables[j], srlz);
+										}
+									}
+								}								
+						});
+					
+					alert('Fed exportMongo '+tableName+'\nLoading relevant mongo...');
+				}//END if(confirm('exportMongo:'+tableName
+				else{ 
+					alert('exportMongo: has been cancelled');
+				}
+		}//END exportMongo
+
+
+
+//End Mongo--------------------------------------------------------		
+		/* Drop the database and reload page/data */
+
+		var dropDatabase = function() {			
+			if(indexedDB) {
+				/* Drop the IndexedDB database entirely */
+				indexedDB.deleteDatabase('tasks');
+				window.location.reload();
+			} else if(webSQLSupport) {
+				db.transaction(function(tx) {
+					/* Truncate the tasks table in WebSQL */
+					var sql = 'DELETE FROM tasks';
+					tx.executeSql(sql, [], loadTasks);
+				});
+			}
+		}
+		
+		/* Check if application cache manifest has been updated */
+		if('applicationCache' in window) {
+			var appCache = window.applicationCache;
+			appCache.addEventListener('updateready', function() {
+				appCache.swapCache();
+				if(confirm('Application update is available. Do you wish to update now?')) {
+					window.location.reload();
+				}
+			}, false);
+		}
+	}
+	
+	/* When the page loads, create a new instance of the Tasks object */
+	window.addEventListener('load', function() {
+		new Tasks();
+	}, false);
+})();
+	</script>
+</head>
+<body class="list">
+	<header>
+		<h1><span id="user_name">My</span> Tasks</h1>
+
+		<nav>
+			<ul>
+				<li><a href="#list" class="list">Task List</a></li>
+				<li><a href="#loadMongo" class="loadMongo">Mongo List</a></li>
+				<li><a href="#add" class="add">Add Task</a></li>
+				<li><a href="#settings" class="settings">Settings</a></li>
+				<li><a href="#edit" class="edit">Edit</a></li>
+				<!--window.addEventListener('hashchange', jump, false);-->
+			</ul>
+		</nav>
+	</header>
+	<section class="list">
+		<form name="search">
+				
+				<input type="checkbox" name="alltables" 	id="chk_alltables"/>TABLES-ALL ,
+				<input type="checkbox" name="strategies" 	id="chk_strategies"/>strategies ,
+				<input type="checkbox" name="anlage"		id="chk_anlage"/>anlage ,
+				<input type="checkbox" name="marketevent"	id="chk_marketevent"/>marketevent ,
+				<input type="checkbox" name="trilemma"		id="chk_trilemma"/>trilemma ,
+				<input type="checkbox" name="rule"			id="chk_rule"/>rule ,
+				<input type="checkbox" name="tasks"			id="chk_tasks"/>tasks ,
+				<br/>
+                <input type="checkbox" name="depthAll"/>DEPTH-ALL ,
+                <input type="checkbox" name="checked_only"/>Checked only ,
+                <input type="checkbox" name="drill_links"/>Drill links ,
+				<input type="checkbox" name="skip_orphans"/>Skip Orphans ,
+				<input type="checkbox" name="confirm_all"/>Confirm Defaults ,
+				<input type="checkbox" name="ajax_links"/>Ajax Links ,
+				<input type="checkbox" name="ajax_sync"/>Ajax Sync ,
+				<input type="checkbox" name="show_pics"/>Show Pics ,
+				<input type="checkbox" name="show_desc"/>Show Desc ,
+				<br>
+				<input type="checkbox" name="yahooAll"/>YAHOO-ALL ,
+
+				<input type="checkbox" title='inlineYahooHistoricalPrices("http://finance.yahoo.com/q/hp", task.name, task.linked)' name="HistoricalPrices"/><del>HistPrices</del> ,
+				<input type="checkbox" title='inlineYahooKeyStatistics("http://finance.yahoo.com/q/ks", task.name+"+Key+Statistics")' name="KeyStatistics"/><i>KeyStats</i> ,
+				<input type="checkbox" title='http://finance.yahoo.com/q/co?s="+task.name+"+Competitors' name="Competitors" title="Am I visible?"/>Competitors ,
+				<input type="checkbox" title='http://finance.yahoo.com/q/ae?s="+task.name+"+Analyst+Estimates' name="Estimates"/>Estimates ,
+				<input type="checkbox" title='http://finance.yahoo.com/q/it?s="+task.name+"+Insider+Transactions' name="InsiderTransactions"/><del>Ins Trans</del> ,
+				<input type="checkbox" name="Headlines"/><del>Headlines</del> ,
+		 		<input type="checkbox" title='inlineYahooIndustry("http://finance.yahoo.com/q/in", task.name+"+Industry")' name="Industry"/>Industry ,
+				<input type="checkbox" title='inlineYahooCashFlow("http://finance.yahoo.com/q/cf", task.name+"+Cash+Flow")' name="CashFlow"/><i>CashFlow</i> ,
+				<input type="checkbox" title='inlineYahooCashFlow("http://finance.yahoo.com/q/cf", task.name+"+Cash+Flow&annual")' name="CashFlowAnnual"/><i>CF Annual</i> ,
+				<input type="checkbox" title='inlineYahooEarningsCalendar("http://www.nasdaq.com/earnings/earnings-calendar.aspx")' name="EarningsCalendar"/><del><b>Earn Cal </b></del>,
+
+				<br>TRACE
+				<input type="checkbox" name="show_oid"	/> Show $oid ,
+				<input type="checkbox" name="verbose"	/> Verbose ,
+					
+				<select name="table_name" id="tns"> Table (to add another table, e.g. trilemma adjust forms.search, forms.add, update openDB(), showTask(), mongoLinkedTo(), loadMongoTasks(), preloadMongo(), exportMongo() ) 
+					<option>strategies</option>
+					<option>anlage</option>
+					<option>marketevent</option>
+					<option>trilemma</option>
+					<option>rule</option>
+					<option>tasks</option>
+				</select>
+				DB: loadMongoTasks, loadTasks:
+				<select name="db_name" id="dbs">
+					<option>Mongo</option>
+					<option>Local</option>
+					<option>Liferay</option>
+				</select>	
+			<input type="search" name="query" placeholder="Search tasks...">
+			<input type="submit" id="SearchNSave" value="searchTasks-load[Mongo]Tasks">
+			
+
+		</form>
+		<ul id="list"></ul>
+	</section>
+
+	<section class="edit">
+		<form name="edit">
+			<label>Table 
+				<select name="table_name">
+					<option>strategies</option> <option>anlage</option> <option>marketevent</option><option>trilemma</option><option>rule</option><option>tasks</option>
+				</select>
+			</label>	
+			<label>DB: loadMongoTasks, loadTasks:
+				<select name="db_name" id="dbs">
+					<option>Local</option> <option>Mongo</option> <option>Liferay</option>
+				</select>	
+			</label>
+			
+				
+			</label>
+			<label name="tickerLabel"> Name
+				<input type="text" id="maOid" name="editOid"/>
+				<input type="text" id="ticker" name="editName"/>
+				
+			</label>
+			<label name="descLabel"> Description
+				<textarea name="editDesc"></textarea>
+			</label>	
+			<label name="linkedLabel"> Linked table:item
+				<textarea name="editLinked"></textarea>
+			</label>
+			
+			<label name="drilledLabel"> Drilling Links
+				<textarea name="editDrilled"></textarea>
+			</label>
+
+			<label>Action
+				<select name="action" id="action">
+					<option selected>select...</option>
+					<option>insertTask</option> 
+					<option>empty</option> 
+					<option>empty2</option>
+				</select>	
+			</label>
+
+			<label name="msgLabel">Message:
+			
+			<input type="submit" value="insertTask">
+			
+		</form>
+	</section>
+
+	<section class="add">
+		<form name="add">
+			<label>
+				Table
+				<select name="table_name">
+					<option>strategy</option>
+					<option>anlage</option>
+					<option>marketevent</option>
+					<option>trilemma</option>
+					<option>rule</option>
+					<option>tasks</option>
+				</select>
+			</label>
+			<label>DB: loadMongoTasks, loadTasks:
+				<select name="db_name" id="dbs">
+					<option>Local</option> <option>Mongo</option> <option>Liferay</option>
+				</select>	
+			</label>	
+			<label>
+				Name
+				<textarea name="name"></textarea>
+			</label>
+			<label>
+				Description
+				<textarea name="desc"></textarea>
+			</label>	
+			<label>
+				Linked table:item
+				<textarea name="linked"></textarea>
+			</label>	
+			<input type="submit" value="insertTask">
+		</form>
+	</section>
+
+	<section class="settings">
+		<form name="settings">
+			<label>
+				Your Name
+				<input type="text" name="name">
+			</label>
+			<label name="confirmedByDefaultLabel"> confirm by default (e.g. mongoLinkedTo_drillLinks)
+				<textarea name="confirmedByDefault" placeholder="mongoLinkedTo_drillLinks"></textarea>
+			</label>
+			<label>
+				Color Scheme
+				<select name="color_scheme">
+					<option>Blue</option>
+					<option>Red</option>
+					<option>Green</option>
+				</select>
+			</label>
+
+			<input type="submit" value="saveSettings">
+			<input type="reset" value="resetSettings">
+		</form>
+	</section>
+</body>
+</html>
