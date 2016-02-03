@@ -7,19 +7,40 @@
   <script src='/javascripts/jquery-ui.js'></script>
   <script src="/javascripts/bootstrap.min.js"></script>
   
-
+  <!-- DrawingTable -->
   <link rel='stylesheet' href='/stylesheets/style.css'></link>
-
   <link rel='stylesheet' href='DrawingTable/css/colorpicker.css' />
   <link rel='stylesheet' href='DrawingTable/css/style.css' />
-
-
   <script src='DrawingTable/js/colorpicker.js'></script>
+ 
+  <!-- mm_navbar with maJqAjax.js -->
+  <link rel="stylesheet" href="externalMemory/public/css/bootstrap.css"/>
+  <link rel="stylesheet" href="externalMemory/public/css/main.css"/>
+<!--
+        //  <script src="js/plugins.js"></script>
+        //  <script src="js/main.js"></script>
+        // <script src="js/vendor/modernizr-2.6.2.min.js"></script>-->
+
+<script>
+    $( function() {
+      $( ".drag" ).draggable( {
+        cursor: "move",
+        //revert: "invalid",
+        snap: ".destination-area2",
+        snapMode: "inner"
+      });
+    });  
+    $(function () {
+      $('[data-toggle="tooltip"]').tooltip();
+      $('[data-toggle="popover"]').popover();
+    });
+  </script>    
+
 
 </head>
 
 <body ng-app="listApp" ng-controller="listController">
-
+<a href="#">Load Navbar</a>
 <div id='content'>
   <select>
         <option>2Do</option>
@@ -162,7 +183,7 @@
       </thead>
       <tbody>
         <tr ng-repeat="player in playerList | filter: searchFilter">
-          <td class="flag"><img ng-src="img/{{player.flag}}.png"></td>
+          <td class="flag"><img ng-src="images/{{player.flag}}.png"></td>
           <td>{{player.name}}</td>
           <td>{{player.team}}</td>
         </tr>
@@ -177,5 +198,6 @@
   <script src="/javascripts/angular.js"></script>
   <script src="/javascripts/app.js"></script>
   <script src="/javascripts/controllers.js"></script>
+   <script src="/javascripts/maJqAjax.js"></script>
 </body>
 </html>

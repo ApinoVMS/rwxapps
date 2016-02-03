@@ -5,7 +5,7 @@ angular.module("movieDB", [
 	'movieDB.catalog',
 	'movieDB.movie',
 	'movieDB.genre',
-	'movieDB.paginate-filter',
+	//'movieDB.paginate-filter',
 	'movieDB.movie-service'
 	]).
 config(['$routeProvider', function($routeProvider){

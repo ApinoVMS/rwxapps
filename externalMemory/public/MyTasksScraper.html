@@ -2052,7 +2052,7 @@ var corrArr = function(htHistZ,htHistY){
 				}else{qTokens[0]=query;}
 			}
 			if ( !document.forms.search.depthAll.checked && !document.forms.search.skip_orphans.checked) loadOrphans=true; 
-			var maUrl= "https://api.mongolab.com/api/1/databases/admire-app/collections/"+myTable+"?apiKey=fUzDy7tkDnwN39f-r9nki3FNM7Lo1Lup";
+			var maUrl= "https://api.mongolab.com/api/1/databases/admire-app/collections/"+myTable+"?apiKey=xxx";
 			var result;
 			$.ajax({ url: maUrl, cache: false, async: false }).done(function( html ) {
 				console.log('ajaxResult='+html);
@@ -2221,7 +2221,7 @@ var corrArr = function(htHistZ,htHistY){
 		//*** calledBy searchTasks
 		var preloadMongo=function(){
 			var maUrlPrefix= "https://api.mongolab.com/api/1/databases/admire-app/collections/";
-			var maUrlSuffix="?apiKey=fUzDy7tkDnwN39f-r9nki3FNM7Lo1Lup";
+			var maUrlSuffix="?apiKey=xxx";
 			var trc="preloaded tasks: ";
 	
 				if (!mem.strategies){
@@ -2409,7 +2409,7 @@ var corrArr = function(htHistZ,htHistY){
 				var lmtQ=task.name; //loadMongoTasksQuery
 				var maUrl= "https://api.mongolab.com/api/1/databases/admire-app/collections/";
 				maUrl+=tn;				
-				maUrl+="?apiKey=fUzDy7tkDnwN39f-r9nki3FNM7Lo1Lup";
+				maUrl+="?apiKey=xxx";
 				var ins ='{ _id: { $oid: "';
 				if (task.id) ins+=task.id;
 				else { 
@@ -2496,7 +2496,7 @@ TechnologicalLeadership, ProfitMargins, CapInvestmentShortage-RetiringWorkforce,
 
 				var maUrl= "https://api.mongolab.com/api/1/databases/admire-app/collections/";
 				maUrl+=tableName; 
-				maUrl+="?apiKey=fUzDy7tkDnwN39f-r9nki3FNM7Lo1Lup";
+				maUrl+="?apiKey=xxx";
 				var ins;
 				/* { _id: { $oid: "52c32b35e4b0c5bed3a83aaf" }} */
 				if (maTask._id) {

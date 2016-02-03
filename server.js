@@ -35,14 +35,18 @@ function serveStatic(response, cache, absPath) {
 
 var server = http.createServer(function(request, response) {
   var filePath = false;
-
+  console.log("url="+request.url);
   if (request.url == '/') {
-    filePath = 'public/index.html';
-  } else {
-    filePath = 'public' + request.url;
+    filePath = '/public/index.html';
+  } else if (request.url.startsWith('/externalMemory')) {
+    filePath = request.url;
+  }
+   else {
+    filePath = '/public' + request.url;
   }
 
-  var absPath = './' + filePath;
+  var absPath = '.' + filePath;
+  console.log("serveStatic("+absPath+");");
   serveStatic(response, cache, absPath);
 });
 

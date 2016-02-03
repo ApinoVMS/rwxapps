@@ -29,7 +29,7 @@
             //Do something with the result.  Possibly update a last-saved date
             console.log("Successfully saved: " + json);
         }).error(function(jqXHR, textStatus, errorThrown) {
-            alert("Add error handling");
+            alert("KnockoutDocs.save: Add error handling");
         });
     },
     createDocument: function() {

@@ -6,16 +6,13 @@
 
     </div>
 
-    <div class="movie-container col-sm-2 col-xs-6" ng-repeat="movie in movieList | paginate:currentPage:pageSize">
+    <div class="movie-container col-sm-2 col-xs-6" ng-repeat="movie in movieList">
       <a href="#/movie/{{movie.id}}" class="movie-thumb">
         <img class="thumbnail img-responsive" ng-src="img/posters{{movie.poster_path}}">
         <h5>{{movie.title}}</h5>
       </a>
     </div>
 
-    <div class="col-xs-12">
-      <pagination class="pagination" total-items="movieList.length" ng-model="currentPage" items-per-page="pageSize"></pagination>
-    </div>
 
   </div>
 

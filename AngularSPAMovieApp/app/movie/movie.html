@@ -1,5 +1,5 @@
 <div class="well col-xs-12 moviedetails">
-	<img class="poster img-thumbnail img-responsive" ng-src="img/posters{{movie.poster_path}}">
+	
 
 	<a class="return-link" href="#">
 		<button class="return-btn btn btn-default">
@@ -7,18 +7,26 @@
 			Return to Catalog
 		</button>
 	</a>
-
-	<h1 class="movie-title">{{movie.title | revertWords}}({{movie.release_date | date: 'yyyy'}})</h1>
-
+	<a href="{{movie.backdrop_path}}/{{movie.homepage}}">
+		<h1 class="movie-title">{{movie.title }}({{movie.release_date | date: 'yyyy'}})</h1>
+	</a>
 	<a ng-repeat="genre in movie.genres" class="btn btn-info" href="#">{{genre.name}}</a>
 
 	<div class="overview">{{movie.overview}}</div>
+	<kbd>Tagline: {{movie.tagline}}</kbd>
 
 	<div class="extra-details">
-		<kbd>Runtime: {{movie.runtime}} minutes</kbd>
-		<kbd>Country: {{movie.production_countries[0].name}}</kbd>
-		<kbd>Language: {{movie.spoken_languages[0].name}}</kbd>
-		<kbd>Release: {{movie.release_date | date}}</kbd>
+		<kbd>Runtime: {{movie.runtime}}</kbd><br/>
+		<kbd>Links: </kbd>
+
+		<a ng-repeat="link in movie.production_links" href="{{link.server}}{{link.name}}">{{link.name}} | </a><br/>
+		<kbd>Commands: {{movie.spoken_languages[0].name}}</kbd><br/>
+		<kbd>Tagline: {{movie.release_date | date}}</kbd>
 	</div>
+	<img class="poster img-thumbnail img-responsive" ng-src="img/posters{{movie.poster_path}}">
+	<a ng-repeat="ima in movie.backdrop_images" href="img/backdrop_images/{{movie.original_title}}/{{ima.file}}">
+		<img width="200" src="img/backdrop_images/{{movie.original_title}}/{{ima.file}}">
+	</a>
+	
 
 </div>
